@@ -165,7 +165,7 @@ function fMontaScript(wItem, pBoDesc) {
                         </button>
                     </div>
                     <div class=" cc-btn-col  cc-col cc-col-4  " style=" float: right;">
-                        <button data-script-btn-finalizar='true' class="cc-btn btn btn-block  cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                        // <button data-script-btn-finalizar='true' class="cc-btn btn btn-block  cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
                             FINALIZAR
                         </button>
                     </div>

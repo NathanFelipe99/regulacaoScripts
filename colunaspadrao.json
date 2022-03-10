@@ -1,0 +1,22 @@
+{ 
+    "cnPaciente": "cnpaciente",
+    "nmPaciente": "anpacientenome",
+    "cnPacienteSTS": "cnpacientestatus",
+    "anPacienteSTS": "anpacientestatus",
+    "cnEmpresa": "cnfilial",
+    "cnConvenio": "cnconvenio",
+    "nmConvenio": "anconvenio",
+    "anEndereco": "anendereco",
+    "dcSexo": "casexo",
+    "nrFaixaEtaria": "nmfaixa_etaria",
+    "nrIdade": "nmidade",
+    "cnProduto": "cnproduto",
+    "anProduto": "anproduto",
+    "cnOrcamento": "cnorcamento",
+    "cnOrcamentoSTS": "cnorcamentostatus",
+    "dtOrcamentoIni": "dtorcamentoini",
+    "dtOrcamentoFim": "dtorcamentoFim",
+    "lsEquipamentos": "lsequipamentos",
+    "lsMatmeds": "lsmatmeds",
+    "lsProcedimentos": "lsprocedimentos"
+}

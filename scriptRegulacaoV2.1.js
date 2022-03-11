@@ -1,33 +1,23 @@
 function fClausula(pScript, pCondicional) {
-var wScript = parseInt(pScript);
-var wCondicional = pCondicional;
-var wMClausulas = wCondicional.split("&&");
-var wRetornoClausula = " ";
-for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
-    var wItemClausula = wMClausulas[wIdx];
-    if (wIdx > 0) wRetornoClausula += " && ";
-    var wOperador = (wItemClausula.indexOf("==") >= 0) ? "==" : wItemClausula.indexOf("!=") ? "!=" : "";
+    var wScript = parseInt(pScript);
+    var wCondicional = pCondicional;
+    var wMClausulas = wCondicional.split("&&");
+    var wRetornoClausula = " ";
+    for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
+        var wItemClausula = wMClausulas[wIdx];
+        if (wIdx > 0) wRetornoClausula += " && ";
+        var wOperador = (wItemClausula.indexOf("==") >= 0) ? "==" : wItemClausula.indexOf("!=") ? "!=" : "";
 
-    wItemClausula = wItemClausula.split(wOperador)
-    let wScriptItem = wItemClausula[0];
-    let wValor2 = wItemClausula[1];
-    let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
-    wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
+        wItemClausula = wItemClausula.split(wOperador)
+        let wScriptItem = wItemClausula[0];
+        let wValor2 = wItemClausula[1];
+        let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
+        wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
+    }
+    return wRetornoClausula;
 }
-return wRetornoClausula;
-}
-
-
-
-var wQtdMinutosInicio ;
 
 function fMontaScript(wItem, pBoDesc) {
-    console.log('MontaScript')
-   
-    wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss')
-
-    console.log(wQtdMinutosInicio);
-    
     wItem = parseInt(wItem)
     var wScriptItem = richardScript[wItem];
 
@@ -35,8 +25,6 @@ function fMontaScript(wItem, pBoDesc) {
     var wColspan = wScriptItem.qtInteracaoColspan || 5;
     var wMaxLen = wScriptItem.qtInteracaoTamanho || 40;
     var wHtml = ""
-
-
     if (wScriptItem.anInteracaoCondicional) {
         //alert(2)
         wClausula = fClausula(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
@@ -65,7 +53,7 @@ function fMontaScript(wItem, pBoDesc) {
             wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">
                 ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
             wHtml += `
-                <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                <div class="cc-inp  cc-col cc-col-${wColspan}" style="">
                     <div class="form-group position-relative">
                         <div>
                             ${wScriptItem.cnInteracaoTP != 1 ? '<label for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>' : ""}
@@ -84,7 +72,7 @@ function fMontaScript(wItem, pBoDesc) {
                 var wMDominioItens = _ccCombo.dm(wRotinaCarga.substr(2, 2).toLocaleLowerCase(), "", wRotinaCarga.substr(5, wRotinaCarga.length), "", "", 7);
                 wHtml += `
 
-                        <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                        <div class="cc-inp  cc-col cc-col-${wColspan}" style="">
                             <div class="form-group position-relative">
                                 <div>
                                     <label for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>
@@ -92,7 +80,7 @@ function fMontaScript(wItem, pBoDesc) {
                                 </div>
                             </div>
                         </div>                            
-                            `;
+                            `
             }
             break;
         case 10: // RADIO
@@ -104,29 +92,16 @@ function fMontaScript(wItem, pBoDesc) {
                 for (let wIdx = 0; wIdx < wMOptions.length; wIdx++) {
                     wHtml += `
                         
-                            <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                            <div class="cc-inp  cc-col cc-col-${wColspan}" style="">
                                 <div class="form-group position-relative">
                                     <div class="form-check">
-                                    <input data-interacao-requerido='${
-                                      wScriptItem.boRequerido
-                                    }' data-script-omt='${
-                      wScriptItem.cnRegulacaoScript
-                    }' data-interacao-tp='${
-                      wScriptItem.cnInteracaoTP
-                    }'  data-script-omt-item='${
-                      wScriptItem.csRegulacaoScriptItem
-                    }' class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="${
-                      wMOptions[wIdx]
-                    }"/>
-                                    <label  class="form-check-label" for="flexRadioDefault2">${
-                                      wRotinaCarga[wMOptions[wIdx]]
-                                    }</label>
+                                    <input data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}'  data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="${wMOptions[wIdx]}"/>
+                                    <label  class="form-check-label" for="flexRadioDefault2">${wRotinaCarga[wMOptions[wIdx]]}</label>
                                     </div>
                                 </div>
-                            </div>
-                        </div>  
+                            </div>  
 
-                                `;
+                                `
                 }
             }
             break;
@@ -176,116 +151,113 @@ function fMontaScript(wItem, pBoDesc) {
     }
 
     $("[name='data-buttons-script']").html(`
-        <div class="cc-col w-100" style="background-color:white">
-            <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
+        <div style="" class="cc-col w-100">
+            <div data-obj-seq="100"  class=" cc-row" style=" border-color: rgb(0 0 0 / 40%);" id="data-buttons-principal">
                 ${wHtmlButtons}
-            </div>
-            <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
+                <div class=" cc-btn-col  cc-col cc-col-4  " style=" float: right;">
+                    <button data-script-btn-finalizar='true' class="cc-btn btn btn-block  cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                        FINALIZAR
+                    </button>
+                </div>
+            <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left">
                 <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
-                <input value="" maxlength="50" name="anObservacao" data-script-omt-index='${wItem}'data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="">
-            </div>
-            <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
-                <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
-                    FINALIZAR
-                </button>
+                <input value="" maxlength="50" name="anObservacao"  data-script-btn-omt-index='${wItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  
+                data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="">
             </div>
         </div>
     `);
-    }
+}
 
 window.wJsonScriptRegulacao = {}
 wTabelaNome = "shcregulacaoscript"
 var wJsn = `{
-                obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
-            }`;
+                    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
+                }`;
 
-var wJsn = `{
-    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
-}`;
-
-//
 wAjaxURI = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsn);
 $.when(wAjaxURI).then(
-async function(jsonRespObj) {
-    try {
-        /* VALIDA DATARESUL */
-        _cc.validaResultadoAjax(jsonRespObj);
-        var wData = jsonRespObj.data;
-        var wHtml = "";
-        for (let wIdx = 0; wIdx < wData.length; wIdx++) {
-            const wScript = wData[wIdx];
-            wHtml += `<button data-btn-script='true' class="mx-1 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
+    async function(jsonRespObj) {
+        try {
+            /* VALIDA DATARESUL */
+            _cc.validaResultadoAjax(jsonRespObj);
+            var wData = jsonRespObj.data;
+            var wHtml = "";
+            for (let wIdx = 0; wIdx < wData.length; wIdx++) {
+                const wScript = wData[wIdx];
+                wHtml += `<button data-btn-script='true' class="mx-1 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
+            }
+            $("[name='frmshc.paginaprincipal']").html(`
+                    <div style="max-width: 800px;margin-left: auto;margin-right: auto;background:white;" >
+                        <div name="mnu-scripts">${wHtml}</div>
+                        <hr>
+                        <div name="fme-scripts"></div>
+                    </div>
+                `)
+                /* VARIAVEL SALVAR */
+
+
+            $(document).off(cc.evento.click, "[data-btn-script='true']");
+            $(document).on(cc.evento.click, "[data-btn-script='true']", function() {
+                var wScriptCodigo = $(this).attr("data-script")
+                var wTabelaNome = "shcregulacaoscriptitem"
+                var wColunas =
+                    "cnRegulacaoScript,csRegulacaoScriptItem,nrOrdem,anInteracaoTexto,cnInteracaoTP,qtInteracaoTamanho,qtInteracaoOpcao,anInteracaoCondicional";
+                wColunas +=
+                    ",anInstrucoes,anDirecionamentoCondicional,cnDirecionamentoScript,cnDirecionamentoScriptItem,boScriptFim,boRequerido,qtInteracaoColspan";
+                var wJsnObjScriptItem = `{
+                        obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=" + wColunas + "&orderby=nrOrdem&where=cnRegulacaoScript=" + wScriptCodigo), +1, 10, 0, 0, 1)}'
+                    }`;
+                wJsonScriptRegulacao["" + wScriptCodigo + ""] = (wJsonScriptRegulacao["" + wScriptCodigo + ""]) ? wJsonScriptRegulacao["" + wScriptCodigo + ""] : {};
+                wAjaxScriptItem = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsnObjScriptItem);
+                $.when(wAjaxScriptItem).then(
+                    async function(jsonScriptItem) {
+                        try {
+                            /* VALIDA DATARESUL */
+                            _cc.validaResultadoAjax(jsonScriptItem);
+                            var wData = jsonScriptItem.data;
+                            wHtml = `
+                                        <div class="">
+                                            <div class="p-1" name="data-conteudo-script">
+                                            </div>
+                                            <div class="p-1" name="data-buttons-script" >
+                                            
+                                            </div>
+                                        </div>
+                                        `
+                            $("[name='fme-scripts']").html(wHtml);
+                            window.richardScript = wData
+                            fMontaScript(0)
+
+                        } catch (error) {
+                            console.log("error: ", error)
+                        }
+                    })
+            })
+        } catch (error) {
+            console.log("error: ", error)
         }
-        $("[name='frmshc.paginaprincipal']").html(`   
-            <div style="max-width: 800px;margin-left: auto;margin-right: auto;background:white;" >
-                <div name="mnu-scripts">${wHtml}</div>
-                <hr>
-                <div name="fme-scripts"></div>
-            </div>
-            `);
-            /* VARIAVEL SALVAR */
+    })
 
-
-        $(document).off(cc.evento.click, "[data-btn-script='true']");
-        $(document).on(cc.evento.click, "[data-btn-script='true']", function() {
-            var wScriptCodigo = $(this).attr("data-script")
-            var wTabelaNome = "shcregulacaoscriptitem"
-            var wColunas =
-                "cnRegulacaoScript,csRegulacaoScriptItem,nrOrdem,anInteracaoTexto,cnInteracaoTP,qtInteracaoTamanho,qtInteracaoOpcao,anInteracaoCondicional";
-            wColunas +=
-                ",anInstrucoes,anDirecionamentoCondicional,cnDirecionamentoScript,cnDirecionamentoScriptItem,boScriptFim,boRequerido,qtInteracaoColspan";
-            var wJsnObjScriptItem = `{
-                    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=" + wColunas + "&orderby=nrOrdem&where=cnRegulacaoScript=" + wScriptCodigo), +1, 10, 0, 0, 1)}'
-                }`;
-            wJsonScriptRegulacao["" + wScriptCodigo + ""] = (wJsonScriptRegulacao["" + wScriptCodigo + ""]) ? wJsonScriptRegulacao["" + wScriptCodigo + ""] : {};
-            wAjaxScriptItem = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsnObjScriptItem);
-            $.when(wAjaxScriptItem).then(
-                async function(jsonScriptItem) {
-                    try {
-                        /* VALIDA DATARESUL */
-                        _cc.validaResultadoAjax(jsonScriptItem);
-                        var wData = jsonScriptItem.data;
-                        wHtml = `
-                                    <div class="">                               
-                                        <div name="mnu-scripts-respondedor">
-                                            <label for="anObservacao"><strong>RESPONDEDOR</strong></label>
-                                            <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control" placeholder="">
-                                        </div>
-                                        <div class="p-1 mt-2" name="data-conteudo-script">
-                                        </div>
-                                        <div class="p-1" name="data-buttons-script" >
-                                        </div>
-                                    </div>
-                                    `;
-                        $("[name='fme-scripts']").html(wHtml);
-                        window.richardScript = wData
-                        fMontaScript(0)
-
-                    } catch (error) {
-                        console.log("error: ", error)
-                    }
-                })
-        })
-    } catch (error) {
-        console.log("error: ", error)
-    }
+$(document).off(cc.evento.blur, "[name='anObservacao']");
+$(document).on(cc.evento.blur, "[name='anObservacao']", function() {
+    var wValor = $(this).val()
+    var wScriptCodigo = $(this).attr("data-script-btn-omt")
+    var wScriptItem = $(this).attr("data-script-btn-omt-item")
+    console.log("aqqq");
+    // console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]);
+    // console.log(wValor);
+    wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] ? console.log("renatinho da massa") : console.log("pai da ccase");
+    wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].anOBS = wValor || "";
+    //console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].anOBS);
 })
 
-
-
-
-
-//MUZUKASHI
 $(document).off(cc.evento.blur, "[data-script-omt-item]");
 $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
-
     var wScriptCodigo = $(this).attr("data-script-omt");
     var wScriptItem = $(this).attr("data-script-omt-item");
 
     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
     var wValorInteracao = wInteracaoHtm.attr("data-interacao-tp") == "10" ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
-    var wValorObservacao = $("[name='anObservacao']").val()
 
     var wJson = {
         cnRegulacao: "", //campo na tela
@@ -293,20 +265,21 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
         dmSHCRegulacaoSTS: "", //campo na tela
         dtInicio: "", //momento em que o script é carregado
         dtFinal: "", // momento em que o script é finalizado
-        qtMin: wQtdMinutes, // dtFinal - dtInicio
+        qtMin: "15", // dtFinal - dtInicio
         cnRegulacaoScript: wScriptCodigo,
         cnRegulacaoScriptItem: wScriptItem,
         cnProfissional: window.cc.global.cnProfissional, //Profissional que está fazendo as perguntas?
         anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
         dtPergunta: "", //momento em que a pergunta foi aberta
-        anRespondedor: $("[name='anRespondedor']").val(), //campo na tela
+        anRespondedor: "NATHAN", //campo na tela
+        value: _cc.string.valor(wValorInteracao),
         dtResposta: "", //momento em que a pergunta foi respondida ou momento em que foi clicado em 'proximo'?
-        anResposta: _cc.string.valor(wValorInteracao),
-        anOBS: wValorObservacao,
+        anResposta: "",
+        anOBS: ""
     };
-    
-    wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
 
+    wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
+    console.log(wJson.anOBS);
     let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
     let wSaveMthd = "post";
 
@@ -315,9 +288,9 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     console.log('como bate')
     console.log(wJsonScriptRegulacao);
     for (let wIdx = 0; wIdx < wJsonLength; wIdx++) {
-    const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
-    //console.log("Script", element);
-    var wMItens = Object.getOwnPropertyNames(wJsonScriptRegulacao["" + element + ""]);
+        const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
+        //console.log("Script", element);
+        var wMItens = Object.getOwnPropertyNames(wJsonScriptRegulacao["" + element + ""]);
         for (let wIdx2 = 0; wIdx2 < wMItens.length; wIdx2++) {
             //console.log("Script Item ", wMItens[wIdx2]);
             //console.log(wJsonScriptRegulacao["" + element + ""][wMItens[wIdx2]]);
@@ -334,54 +307,41 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
                 anPergunta: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anPergunta"] + "",
                 dtPergunta: wJsonScriptRegulacao[element][wMItens[wIdx2]]["dtPergunta"],
                 anRespondedor: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anRespondedor"] + "",
-                anResposta: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anResposta"] + "",
+                anResposta: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["value"] + "",
                 dtResposta: wJsonScriptRegulacao[element][wMItens[wIdx2]]["dtResposta"],
                 anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
             }
-        console.log('jason', wAjaxJson);
-        wVetor.push(wAjaxJson);
+            console.log('jason', wAjaxJson);
+            wVetor.push(wAjaxJson);
 
-        console.log("VETOR", wVetor);
-        $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
-        $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function() {
-            for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
-                //console.log(wVetor.length);
-                await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
-                    console.log("DATA RESULT: ", result);
-                    // apresenta mensagem de sucesso ao salvar
-                }).catch((err) => {
-                    console.log(err);
-                });
-            }
-            _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
-            wVetor = [];
-            fMontaScript(0)
-        });
-    }
+            console.log("VETOR", wVetor);
+            $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
+            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function() {
+                for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
+                    //console.log(wVetor.length);
+                    await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
+                        console.log("DATA RESULT: ", result);
+                        // apresenta mensagem de sucesso ao salvar
+                    }).catch((err) => {
+                        console.log(err);
+                    });
+                }
+                _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
+                wVetor = [];
+                fMontaScript(0)
+            });
+        }
     }
 });
 
+
+
 $(document).off(cc.evento.click, "[data-script-btn-proximo='true']");
 $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
-
-    let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss')
-
-    let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
-    let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
-
-
-    wQtdMinutes = wSeconds
-
-
     var wScriptCodigo = $(this).attr("data-script-btn-omt");
     var wScriptItem = $(this).attr("data-script-btn-omt-item");
     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
     var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
-
-    
-
-
     /* SE REQUERIDO */
     if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
         if (!wValorInteracao || wValorInteracao == "") {
@@ -390,24 +350,13 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
             return;
         }
     }
-    
-
-    
-      
-        
-  
-
     //console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]); 
     fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) + 1)
         // console.log(wJsonScriptRegulacao);
-        
 })
 
-//OMOSHIROI
 $(document).off(cc.evento.click, "[data-script-btn-anterior='true']");
 $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async function() {
-    console.log('btn anterior');
-
     try {
         var wScriptCodigo = $(this).attr("data-script-btn-omt");
         var wScriptItem = $(this).attr("data-script-btn-omt-item") - 1;

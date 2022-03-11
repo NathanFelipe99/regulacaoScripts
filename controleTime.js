@@ -1,4 +1,3 @@
-
 function ControllTime(){
   var wIncialTime = moment().format('DD/MM/YYYY HH:mm:ss') 
 
@@ -30,3 +29,16 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
 
 })
 
+
+
+
+
+let wQtdMinutosFinal  = moment().format('DD/MM/YYYY HH:mm:ss')
+    
+        let wMomentDif = moment(wQtdMinutosFinal,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
+        let wMilisec = moment.duration(wMomentDif);
+    
+        var wTotal = Math.floor(wMilisec.asSeconds());
+
+
+        wJson['anObs'] = wTotal

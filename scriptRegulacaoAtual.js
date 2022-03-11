@@ -382,12 +382,14 @@ $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async funct
         var wScriptCodigo = $(this).attr("data-script-btn-omt");
         var wScriptItem = $(this).attr("data-script-btn-omt-item") - 1;
         fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) - 1, "desc")
-
         var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
-        var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["value"] || {};
+        var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anResposta"] || {};
         console.log(wInteracaoValor);
         (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true): wInteracaoHtm.val(wInteracaoValor);
-
+        
+        var wValorObservacao = (wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anOBS"]) ? wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anOBS"] : ""
+        var wObservacaoHtm = $("[name='anObservacao']")
+        wObservacaoHtm.attr("value", wValorObservacao);
     } catch (error) {
         console.log(error);
     }

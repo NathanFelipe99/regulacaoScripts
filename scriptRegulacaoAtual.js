@@ -21,6 +21,7 @@ return wRetornoClausula;
 
 var wQtdMinutosInicio ;
 
+
 function fMontaScript(wItem, pBoDesc) {
     console.log('MontaScript')
    
@@ -286,14 +287,14 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
     var wValorInteracao = wInteracaoHtm.attr("data-interacao-tp") == "10" ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
     var wValorObservacao = $("[name='anObservacao']").val()
-
+    
     var wJson = {
         cnRegulacao: "", //campo na tela
         csRegulacaoMov: "",
         dmSHCRegulacaoSTS: "", //campo na tela
         dtInicio: "", //momento em que o script é carregado
         dtFinal: "", // momento em que o script é finalizado
-        qtMin: wQtdMinutes, // dtFinal - dtInicio
+        qtMin: '', // dtFinal - dtInicio
         cnRegulacaoScript: wScriptCodigo,
         cnRegulacaoScriptItem: wScriptItem,
         cnProfissional: window.cc.global.cnProfissional, //Profissional que está fazendo as perguntas?
@@ -305,6 +306,16 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
         anOBS: wValorObservacao,
     };
     
+    /* ======= CONTROLE QUANTIDADE DE MINUTOS ======= */
+    let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss');
+    let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
+    let wDuration = moment.duration(wMilSec);
+    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
+
+    wJson['qtMin'] = wSeconds
+    
+
+
     wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
 
     let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
@@ -363,16 +374,6 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
 
 $(document).off(cc.evento.click, "[data-script-btn-proximo='true']");
 $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
-
-    let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss')
-
-    let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
-    let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
-
-
-    wQtdMinutes = wSeconds
-
 
     var wScriptCodigo = $(this).attr("data-script-btn-omt");
     var wScriptItem = $(this).attr("data-script-btn-omt-item");

@@ -195,15 +195,23 @@ $.when(wAjaxURI).then(
             }
             $("[name='frmshc.paginaprincipal']").html(`                   
                 <div style="max-width: 800px;margin-left: auto;margin-right: auto;background:white" class="container">
-                    <div name="mnu-scripts-respondedor" class="mb-3 ml-4 pt-4 row">
-                        <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
-                        <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                        <label for="anRespondedor"><strong>Respondedor</strong></label>
-                        <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                        <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
-                        <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                        <label for="cnProfissional"><strong>Código do Profissional</strong></label>
-                        <input value="" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">                                                
+                    <div name="mnu-scripts-dados" class="mb-3 ml-4 pt-4">
+                        <div style="float: left" class="ml-3 mb-3">
+                            <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
+                            <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                        </div>
+                        <div style="float: left" class="ml-3 mb-3">
+                            <label for="anRespondedor"><strong>Respondedor</strong></label>
+                            <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" >
+                        </div>
+                        <div style="float: left" class="ml-3 mb-3">
+                            <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
+                            <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" >
+                        </div>
+                        <div style="float: left" class="ml-3 mb-3">
+                            <label for="cnProfissional"><strong>Código do Profissional</strong></label>
+                            <input value="" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">  
+                        </div>                                                                       
                     </div>
                     <div name="mnu-scripts">${wHtml}</div>
                     <hr>

@@ -306,7 +306,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
         anOBS: wValorObservacao,
     };
     
-    /* ======= CONTROLE QUANTIDADE DE MINUTOS ======= */
+    /* ======== CONTROLE QUANTIDADE DE MINUTOS ======== */
     let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss');
     let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
     let wDuration = moment.duration(wMilSec);

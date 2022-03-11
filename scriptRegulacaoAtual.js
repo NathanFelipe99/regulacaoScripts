@@ -3,7 +3,7 @@ function fClausula(pScript, pCondicional) {
     var wCondicional = pCondicional;
     var wMClausulas = wCondicional.split("&&");
     var wRetornoClausula = " ";
-
+    
     for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
         var wItemClausula = wMClausulas[wIdx];
         if (wIdx > 0) wRetornoClausula += " && ";
@@ -15,14 +15,11 @@ function fClausula(pScript, pCondicional) {
         let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
         wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
     }
-
+    
     return wRetornoClausula;
 }
 
-
-
 var wQtdMinutosInicio ;//Variável para controlar o tempo inicial de cada questão
-
 
 function fMontaScript(wItem, pBoDesc) {
     console.log('MontaScript')
@@ -35,7 +32,6 @@ function fMontaScript(wItem, pBoDesc) {
     var wColspan = wScriptItem.qtInteracaoColspan || 5;
     var wMaxLen = wScriptItem.qtInteracaoTamanho || 40;
     var wHtml = ""
-
 
     if (wScriptItem.anInteracaoCondicional) {
         //alert(2)
@@ -135,64 +131,63 @@ function fMontaScript(wItem, pBoDesc) {
         default:
             break;
     }
+        $("[name='data-conteudo-script']").html(wHtml);
 
-    $("[name='data-conteudo-script']").html(wHtml);
-
-    if (wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]) {
-        var wInteracaoValor = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]["value"];
-        /* SE JA TIVER VALOR SALVO */
-        if (wInteracaoValor) {
-            var wInteracaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}']`);
-            (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true) : wInteracaoHtm.val(wInteracaoValor);
+        if (wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]) {
+            var wInteracaoValor = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]["value"];
+            /* SE JA TIVER VALOR SALVO */
+            if (wInteracaoValor) {
+                var wInteracaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}']`);
+                (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true) : wInteracaoHtm.val(wInteracaoValor);
+            }
         }
-    }
 
-    var wHtmlProximo = `
-        <div class=" cc-btn-col  cc-col cc-col-3  ">
-            <button data-script-btn-proximo='true' data-script-btn-omt-index='${wItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
-                <i class="fas fa-arrow-right"></i>
-                Próximo
-            </button>
-        </div>
-    `;
-
-    var wHtmlAnterior = `
-        <div class=" cc-btn-col  cc-col cc-col-3  ">
-            <button data-script-btn-anterior='true' data-script-btn-omt-index='${wItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
-                <i class="fas fa-arrow-left"></i>
-                Anterior
-            </button>
-        </div>
-    `;
-    var wHtmlButtons = ""
-    if (wItem == 0) {
-        //console.log("aqui");
-        wHtmlButtons = wHtmlProximo;
-    } else if (richardScript[wItem].boScriptFim == 1) {
-        //console.log(richardScript[wItem].boScriptFim == 1);
-        wHtmlButtons = wHtmlAnterior;
-    } else {
-        //console.log("auauau");
-        wHtmlButtons = wHtmlAnterior + wHtmlProximo
-    }
-
-    $("[name='data-buttons-script']").html(`
-        <div class="cc-col w-100" style="background-color:white">
-            <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
-                ${wHtmlButtons}
-            </div>
-            <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
-                <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
-                <input value="" maxlength="50" name="anObservacao" data-script-omt-index='${wItem}'data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="">
-            </div>
-            <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
-                <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
-                    FINALIZAR
+        var wHtmlProximo = `
+            <div class=" cc-btn-col  cc-col cc-col-3  ">
+                <button data-script-btn-proximo='true' data-script-btn-omt-index='${wItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+                    <i class="fas fa-arrow-right"></i>
+                    Próximo
                 </button>
             </div>
-        </div>
-    `);
+        `;
+
+        var wHtmlAnterior = `
+            <div class=" cc-btn-col  cc-col cc-col-3  ">
+                <button data-script-btn-anterior='true' data-script-btn-omt-index='${wItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+                    <i class="fas fa-arrow-left"></i>
+                    Anterior
+                </button>
+            </div>
+        `;
+        var wHtmlButtons = ""
+        if (wItem == 0) {
+            //console.log("aqui");
+            wHtmlButtons = wHtmlProximo;
+        } else if (richardScript[wItem].boScriptFim == 1) {
+            //console.log(richardScript[wItem].boScriptFim == 1);
+            wHtmlButtons = wHtmlAnterior;
+        } else {
+            //console.log("auauau");
+            wHtmlButtons = wHtmlAnterior + wHtmlProximo
+        }
+
+        $("[name='data-buttons-script']").html(`
+            <div class="cc-col w-100" style="background-color:white">
+                <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
+                    ${wHtmlButtons}
+                </div>
+                <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
+                    <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
+                    <input value="" maxlength="50" name="anObservacao" data-script-omt-index='${wItem}'data-script-omt='${wScriptItem.cnRegulacaoScript}'  
+                    data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="">
+                </div>
+                <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
+                    <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                        FINALIZAR
+                    </button>
+                </div>
+            </div>
+        `);
     }
 
 window.wJsonScriptRegulacao = {}
@@ -201,7 +196,6 @@ wTabelaNome = "shcregulacaoscript"
 var wJsn = `{
                 obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
             }`;
-
 
 wAjaxURI = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsn);
 $.when(wAjaxURI).then(
@@ -222,8 +216,6 @@ async function(jsonRespObj) {
                 <div name="fme-scripts"></div>
             </div>
             `);
-            /* VARIAVEL SALVAR */
-
 
         $(document).off(cc.evento.click, "[data-btn-script='true']");
         $(document).on(cc.evento.click, "[data-btn-script='true']", function() {
@@ -270,8 +262,6 @@ async function(jsonRespObj) {
     }
 })
 
-
-//MUZUKASHI
 $(document).off(cc.evento.blur, "[data-script-omt-item]");
 $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
 
@@ -308,8 +298,6 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
 
     wJson['qtMin'] = wSeconds
     
-
-
     wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
 
     let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
@@ -375,9 +363,6 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
     var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
 
-    
-
-
     /* SE REQUERIDO */
     if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
         if (!wValorInteracao || wValorInteracao == "") {
@@ -386,31 +371,26 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
             return;
         }
     }
-    
-
-
     //console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]); 
     fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) + 1)
-        // console.log(wJsonScriptRegulacao);
-        
+        // console.log(wJsonScriptRegulacao);  
 })
 
-
-//OMOSHIROI
 $(document).off(cc.evento.click, "[data-script-btn-anterior='true']");
 $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async function() {
     console.log('btn anterior');
-
     try {
         var wScriptCodigo = $(this).attr("data-script-btn-omt");
         var wScriptItem = $(this).attr("data-script-btn-omt-item") - 1;
         fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) - 1, "desc")
-
         var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
-        var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["value"] || {};
+        var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anResposta"] || {};
         console.log(wInteracaoValor);
         (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true): wInteracaoHtm.val(wInteracaoValor);
-
+        
+        var wValorObservacao = (wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anOBS"]) ? wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["anOBS"] : ""
+        var wObservacaoHtm = $("[name='anObservacao']")
+        wObservacaoHtm.attr("value", wValorObservacao);
     } catch (error) {
         console.log(error);
     }

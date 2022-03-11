@@ -3,6 +3,7 @@ function fClausula(pScript, pCondicional) {
     var wCondicional = pCondicional;
     var wMClausulas = wCondicional.split("&&");
     var wRetornoClausula = " ";
+    
     for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
         var wItemClausula = wMClausulas[wIdx];
         if (wIdx > 0) wRetornoClausula += " && ";
@@ -14,6 +15,7 @@ function fClausula(pScript, pCondicional) {
         let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
         wRetornoClausula += ` '${wMScriptItemCondicional["anResposta"]}' ${wOperador} ${wValor2} `;
     }
+    
     return wRetornoClausula;
 }
 
@@ -177,6 +179,7 @@ function fMontaScript(wItem, pBoDesc) {
 
 window.wJsonScriptRegulacao = {}
 wTabelaNome = "shcregulacaoscript"
+
 var wJsn = `{
                 obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
             }`;
@@ -278,7 +281,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
     let wEndTime = moment().format('DD/MM/YYYY HH:mm:ss');
     let wMilSec = moment(wEndTime, "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
     let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
+    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("h:mm:ss");
 
     wJson['qtMin'] = wSeconds
     wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
@@ -336,6 +339,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
         }
     }
 });
+
 
 $(document).off(cc.evento.click, "[data-script-btn-proximo='true']");
 $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function () {

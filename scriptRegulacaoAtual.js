@@ -1,33 +1,32 @@
 function fClausula(pScript, pCondicional) {
-var wScript = parseInt(pScript);
-var wCondicional = pCondicional;
-var wMClausulas = wCondicional.split("&&");
-var wRetornoClausula = " ";
-for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
-    var wItemClausula = wMClausulas[wIdx];
-    if (wIdx > 0) wRetornoClausula += " && ";
-    var wOperador = (wItemClausula.indexOf("==") >= 0) ? "==" : wItemClausula.indexOf("!=") ? "!=" : "";
+    var wScript = parseInt(pScript);
+    var wCondicional = pCondicional;
+    var wMClausulas = wCondicional.split("&&");
+    var wRetornoClausula = " ";
 
-    wItemClausula = wItemClausula.split(wOperador)
-    let wScriptItem = wItemClausula[0];
-    let wValor2 = wItemClausula[1];
-    let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
-    wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
+    for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
+        var wItemClausula = wMClausulas[wIdx];
+        if (wIdx > 0) wRetornoClausula += " && ";
+        var wOperador = (wItemClausula.indexOf("==") >= 0) ? "==" : wItemClausula.indexOf("!=") ? "!=" : "";
+
+        wItemClausula = wItemClausula.split(wOperador)
+        let wScriptItem = wItemClausula[0];
+        let wValor2 = wItemClausula[1];
+        let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
+        wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
+    }
+
+    return wRetornoClausula;
 }
-return wRetornoClausula;
-}
 
 
 
-var wQtdMinutosInicio ;
+var wQtdMinutosInicio ;//Variável para controlar o tempo inicial de cada questão
 
 
 function fMontaScript(wItem, pBoDesc) {
     console.log('MontaScript')
-   
-    wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss')
-
-    console.log(wQtdMinutosInicio);
+    wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
     
     wItem = parseInt(wItem)
     var wScriptItem = richardScript[wItem];
@@ -136,6 +135,7 @@ function fMontaScript(wItem, pBoDesc) {
         default:
             break;
     }
+
     $("[name='data-conteudo-script']").html(wHtml);
 
     if (wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]) {
@@ -197,15 +197,12 @@ function fMontaScript(wItem, pBoDesc) {
 
 window.wJsonScriptRegulacao = {}
 wTabelaNome = "shcregulacaoscript"
+
 var wJsn = `{
                 obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
             }`;
 
-var wJsn = `{
-    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
-}`;
 
-//
 wAjaxURI = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsn);
 $.when(wAjaxURI).then(
 async function(jsonRespObj) {
@@ -272,9 +269,6 @@ async function(jsonRespObj) {
         console.log("error: ", error)
     }
 })
-
-
-
 
 
 //MUZUKASHI
@@ -372,6 +366,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     }
 });
 
+
 $(document).off(cc.evento.click, "[data-script-btn-proximo='true']");
 $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
 
@@ -393,16 +388,13 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {
     }
     
 
-    
-      
-        
-  
 
     //console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]); 
     fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) + 1)
         // console.log(wJsonScriptRegulacao);
         
 })
+
 
 //OMOSHIROI
 $(document).off(cc.evento.click, "[data-script-btn-anterior='true']");
@@ -417,7 +409,7 @@ $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async funct
         var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
         var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["value"] || {};
         console.log(wInteracaoValor);
-        (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', false): wInteracaoHtm.val(wInteracaoValor);
+        (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true): wInteracaoHtm.val(wInteracaoValor);
 
     } catch (error) {
         console.log(error);

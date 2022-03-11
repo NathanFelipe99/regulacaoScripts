@@ -386,7 +386,7 @@ $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async funct
         var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
         var wInteracaoValor = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]["value"] || {};
         console.log(wInteracaoValor);
-        (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', false): wInteracaoHtm.val(wInteracaoValor);
+        (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true): wInteracaoHtm.val(wInteracaoValor);
 
     } catch (error) {
         console.log(error);

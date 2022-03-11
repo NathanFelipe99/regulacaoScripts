@@ -294,7 +294,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss');
     let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
     let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
+    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("h:mm:ss");
 
     wJson['qtMin'] = wSeconds
     

@@ -39,7 +39,7 @@ function fMontaScript(wItem, pBoDesc) {
         //console.log("wClausula ",wClausula);
         if (!eval(wClausula)) {
             if (regulacaoScript.length == wItem + 1) {
-                $("[name='data-buttons-script']").html('<div><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
+                $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
                 return
             } else {
                 /* REMOVE RESPOSTA SALVA */

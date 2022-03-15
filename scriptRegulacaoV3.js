@@ -20,14 +20,14 @@ function fClausula(pScript, pCondicional) {
 var wQtdMinutosInicio;
 
 function fMontaScript(wItem, pBoDesc) {
-    console.log('MontaScript')
-
+    /** SE JÁ TIVER VALOR, DEIXA READONLY */
+    if ($("[name='anRespondedor']").val()) $("[name='anRespondedor']").attr("readonly", true);
     wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss')
 
     console.log(wQtdMinutosInicio);
     wItem = parseInt(wItem)
-    var wScriptItem = richardScript[wItem];
-
+    // console.log(regulacaoScript[wItem]);
+    var wScriptItem = regulacaoScript[wItem];
     var wRotinaCarga = wScriptItem.qtInteracaoOpcao;
     var wColspan = wScriptItem.qtInteracaoColspan || 5;
     var wMaxLen = wScriptItem.qtInteracaoTamanho || 40;
@@ -35,11 +35,11 @@ function fMontaScript(wItem, pBoDesc) {
 
     if (wScriptItem.anInteracaoCondicional) {
         //alert(2)
-        wClausula = fClausula(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
+        var wClausula = fClausula(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
         //console.log("wClausula ",wClausula);
         if (!eval(wClausula)) {
-            if (richardScript.length == wItem + 1) {
-                $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
+            if (regulacaoScript.length == wItem + 1) {
+                $("[name='data-buttons-script']").html('<div><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
                 return
             } else {
                 /* REMOVE RESPOSTA SALVA */
@@ -145,16 +145,8 @@ function fMontaScript(wItem, pBoDesc) {
                 </button>
             </div>
         `;
-    if (wItem == 0) {
-        //console.log("aqui");
-        wHtmlButtons = wHtmlProximo;
-    } else if (richardScript[wItem - 1].boScriptFim == 1) {
-        //console.log(richardScript[wItem].boScriptFim == 1);
-        wHtmlButtons = wHtmlAnterior;
-    } else {
-        //console.log("auauau");
-        wHtmlButtons = wHtmlAnterior + wHtmlProximo
-    }
+
+    var wHtmlButtons = (wItem == 0) ? wHtmlProximo : (regulacaoScript[wItem].boScriptFim == 1) ? wHtmlAnterior : wHtmlAnterior + wHtmlProximo
 
     $("[name='data-buttons-script']").html(`
         <div class="cc-col w-100" style="background-color:white">
@@ -163,8 +155,8 @@ function fMontaScript(wItem, pBoDesc) {
             </div>
             <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
                 <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
-                <input value="" maxlength="50" name="anObservacao" data-script-omt-index='${wItem}'data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="">
+                <textarea value="" maxlength="5000" name="anObservacao" data-script-omt-index='${wItem}'data-script-omt='${wScriptItem.cnRegulacaoScript}'  
+                data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
             </div>
             <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
                 <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
@@ -194,29 +186,28 @@ $.when(wAjaxURI).then(
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[name='frmshc.paginaprincipal']").html(`                   
-                <div style="max-width: 800px;margin-left: auto;margin-right: auto;background:white;display: grid;" class="container-inputs">
-                    <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px);">
-                       <div style="padding:0 12px 12px 0; >
+                <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs">
+                    <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white">
+                    <div class="m-4">
                             <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
-                            <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                       </div>
-                       <div style="padding:0 12px 12px 0;">
-                            <label for="anRespondedor"><strong>Respondedor</strong></label>
-                            <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                       </div>
-                        <div style="padding:0 12px 12px 0;  >
-                            <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
-                            <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4 col-sm" placeholder="">
-                        </div>
-                        <div style="padding:0 12px 12px 0;>
-                            <label for="cnProfissional"><strong>Código do Profissional</strong></label>
-                            <input value="" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder=""> 
-                        </div>
-                                                                       
+                            <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
                     </div>
-                    <div name="mnu-scripts">${wHtml}</div>
-                    <hr>
-                    <div name="fme-scripts"></div>
+                    <div class="m-4">
+                            <label for="anRespondedor"><strong>Respondedor</strong></label>
+                            <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                    </div>
+                        <div class="m-4">
+                            <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
+                            <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                        </div>
+                        <div class="m-4">
+                            <label for="cnProfissional"><strong>Código do Profissional</strong></label>
+                            <input value="${window.cc.global.cnProfissional}" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" readonly>                         </div>
+                                                                    
+                    </div>
+                    <div name="mnu-scripts" style="background-color:white">${wHtml}</div>
+                    <hr style="background-color:white">
+                    <div name="fme-scripts" style="background-color:white"></div>
                 </div>
             `);
 
@@ -248,11 +239,11 @@ $.when(wAjaxURI).then(
                                     </div>
                                     `;
                             $("[name='fme-scripts']").html(wHtml);
-                            window.richardScript = wData
+                            window.regulacaoScript = wData
                             fMontaScript(0)
 
                         } catch (error) {
-                            console.log("error: ", error)
+                            console.error("error: ", error)
                         }
                     })
             })
@@ -272,15 +263,15 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
     var wValorObservacao = $("[name='anObservacao']").val()
 
     var wJson = {
-        cnRegulacao: "", //campo na tela
+        cnRegulacao: $("[name='cnRegulacao']").val(), //campo na tela
         csRegulacaoMov: "",
-        dmSHCRegulacaoSTS: "", //campo na tela
+        dmSHCRegulacaoSTS: $("[name='dmSHCRegulacaoSTS']").val(), //campo na tela
         dtInicio: "", //momento em que o script é carregado
         dtFinal: "", // momento em que o script é finalizado
         qtMin: '', // dtFinal - dtInicio
         cnRegulacaoScript: wScriptCodigo,
         cnRegulacaoScriptItem: wScriptItem,
-        cnProfissional: window.cc.global.cnProfissional, //Profissional que está fazendo as perguntas?
+        cnProfissional: $("[name='cnProfissional']").val(), //Profissional que está fazendo as perguntas?
         anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
         dtPergunta: "", //momento em que a pergunta foi aberta
         anRespondedor: $("[name='anRespondedor']").val(), //campo na tela
@@ -293,7 +284,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
     let wEndTime = moment().format('DD/MM/YYYY HH:mm:ss');
     let wMilSec = moment(wEndTime, "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
     let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
+    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
 
     wJson['qtMin'] = wSeconds
     wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
@@ -303,7 +294,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
 
     let wVetor = [];
     var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
-    console.log('como bate')
+    // console.log('como bate')
     console.log(wJsonScriptRegulacao);
     for (let wIdx = 0; wIdx < wJsonLength; wIdx++) {
         const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
@@ -358,7 +349,6 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function () 
     var wScriptItem = $(this).attr("data-script-btn-omt-item");
     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
     var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
-    debugger
     /* SE REQUERIDO */
     if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
         if (!wValorInteracao || wValorInteracao == "") {
@@ -368,7 +358,6 @@ $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function () 
         }
     }
     //console.log(wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]); 
-    debugger
 
     fMontaScript(parseInt($(this).attr("data-script-btn-omt-index")) + 1)
     // console.log(wJsonScriptRegulacao);  
@@ -393,10 +382,3 @@ $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async funct
         console.error(error);
     }
 })
-
-
-
-// cnRegulacao;
-// dmSHCRegulacaoSTS;
-// cnProfissional;
-// anRespondedor;

@@ -1,7 +1,7 @@
-var _ccsyscareScript = function () {
-    window.wJsonScriptRegulacao = {}
+window.wJsonScriptRegulacao = {}
+class _ccsyscareScript {
     
-    this.direciona = async function (pScriptItem) {
+    async direciona(pScriptItem) {
         var wScriptItem = regulacaoScript[pScriptItem]
         var wDireciona = wScriptItem.anDirecionamentoCondicional;
         if (wDireciona) {
@@ -10,20 +10,7 @@ var _ccsyscareScript = function () {
         }
     }
 
-    this.limpa = async function (pScriptItem) {
-        debugger
-        var wScriptItem = pScriptItem
-        debugger
-        for (wScriptItem; wScriptItem > 0; wScriptItem--) {
-            debugger
-            $("[name='anRespondedor']").val("")
-            $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anResposta']`).attr("value", "");
-            $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anObservacao']`).attr("value", "");
-            debugger
-        }
-    }
-
-    this.condiciona = function (pScriptItem, pCondicional) {
+    condiciona(pScriptItem, pCondicional) {
         var wScript = parseInt(pScriptItem);
         var wCondicional = pCondicional;
         var wMClausulas = wCondicional.split("&&");
@@ -42,13 +29,11 @@ var _ccsyscareScript = function () {
         return wRetornoClausula;
     }
 
-    this.listen = {
+    listen = {
         clickScript: async () => {
             $(document).off(cc.evento.click, "[data-btn-script='true']");
             $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-
                 await _ccSyscare1.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
-
             })
         },
 
@@ -69,7 +54,6 @@ var _ccsyscareScript = function () {
                 }
                 _ccSyscare1.cria(parseInt(wScriptItem))
             })
-
         },
 
         clickAnterior: () => {
@@ -88,30 +72,10 @@ var _ccsyscareScript = function () {
         },
 
         clickFinalizar: async () => {
-            let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
-            let wSaveMthd = "post";
-            $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
-            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
-                    //console.log(wVetor.length);
-                    await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
-                        console.log("DATA RESULT: ", result);
-                        // apresenta mensagem de sucesso ao salvar
-                        _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
-                    }).catch((err) => {
-                        console.log(err);
-                    });
-                }
-                wVetor = [];
-                var wItem = $(this).attr("data-script-omt-item")
-                //console.log(wItem);
-                await _ccSyscare1.limpa(wItem)
-                _ccSyscare1.cria(0)
-            });
+
         },
 
         clickItem: async () => {
-            _ccSyscare1.listen.clickFinalizar();
             $(document).off(cc.evento.blur, "[data-script-omt-item]");
             $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
 
@@ -147,7 +111,10 @@ var _ccsyscareScript = function () {
                 var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
                 wJson['qtMin'] = wSeconds.toString()
                 wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
-                window.wVetor = [];
+                let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
+                let wSaveMthd = "post";
+
+                let wVetor = [];
                 var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
                 for (let wIdx = 0; wIdx < wJsonLength; wIdx++) {
                     const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
@@ -172,14 +139,29 @@ var _ccsyscareScript = function () {
                             anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
                         }
                         wVetor.push(wAjaxJson);
-                        //console.log("VETOR", wVetor);                        
+                        console.log("VETOR", wVetor);
+                        $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
+                        $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
+                            for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
+                                //console.log(wVetor.length);
+                                await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
+                                    console.log("DATA RESULT: ", result);
+                                    // apresenta mensagem de sucesso ao salvar
+                                    _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
+                                }).catch((err) => {
+                                    console.log(err);
+                                });
+                            }
+                            wVetor = [];
+                            _ccSyscare1.cria(0)
+                        });
                     }
                 }
             });
         }
     }
 
-    this.monta = {
+    monta = {
         htmlCabecalho: async () => {
             var wData = await _ccSyscare1.busca.buscaRegulacaoScript()
             var wHtml = "";
@@ -189,30 +171,30 @@ var _ccsyscareScript = function () {
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[name='frmshc.paginaprincipal']").html(`                   
-                <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs">
-                    <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white;">
-                    <div class="m-4">
-                            <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
-                            <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
-                    </div>
-                    <div class="m-4">
-                            <label for="anRespondedor"><strong>Respondedor</strong></label>
-                            <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
-                    </div>
+                    <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs">
+                        <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white;">
                         <div class="m-4">
-                            <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
-                            <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                                <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
+                                <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
                         </div>
                         <div class="m-4">
-                            <label for="cnProfissional"><strong>Código do Profissional</strong></label>
-                            <input value="${window.cc.global.cnProfissional}" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" readonly>                         </div>
-                                                                    
+                                <label for="anRespondedor"><strong>Respondedor</strong></label>
+                                <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                        </div>
+                            <div class="m-4">
+                                <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
+                                <input value="" maxlength="50" name="dmSHCRegulacaoSTS" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                            </div>
+                            <div class="m-4">
+                                <label for="cnProfissional"><strong>Código do Profissional</strong></label>
+                                <input value="${window.cc.global.cnProfissional}" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" readonly>                         </div>
+                                                                        
+                        </div>
+                        <div name="mnu-scripts" style="background-color:white">${wHtml}</div>
+                        <hr style="background-color:white">
+                        <div name="fme-scripts" style="background-color:white"></div>
                     </div>
-                    <div name="mnu-scripts" style="background-color:white">${wHtml}</div>
-                    <hr style="background-color:white">
-                    <div name="fme-scripts" style="background-color:white"></div>
-                </div>
-            `);
+                `);
         },
         htmlInput: async (pScriptItem) => {
             var wScriptItem = regulacaoScript[parseInt(pScriptItem)]
@@ -223,35 +205,35 @@ var _ccsyscareScript = function () {
             switch (wScriptItem.cnInteracaoTP) {
                 case 1: // TEXT
                     wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">
-                        ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
+                            ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
                     wHtml += `
-                        <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
-                            <div class="form-group position-relative">
-                                <div>
-                                    ${wScriptItem.cnInteracaoTP != 1 ? '<label for=${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>' : ""}
-                                    <input value='' name='anResposta' maxlength='${wMaxLen}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-requerido='${wScriptItem.boRequerido}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-control" placeholder="">
+                            <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                                <div class="form-group position-relative">
+                                    <div>
+                                        ${wScriptItem.cnInteracaoTP != 1 ? '<label for=${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>' : ""}
+                                        <input value='' name='anResposta' maxlength='${wMaxLen}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-requerido='${wScriptItem.boRequerido}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-control" placeholder="">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-        
-                    `;
+            
+                        `;
                     break;
                 case 7: // ROTINA CARGA
                     if (wRotinaCarga.substr(0, 2).toLocaleLowerCase() == "dm") {
                         /* ROTINA CARGA COMBO */
                         wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">
-                        ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
+                            ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
                         var wMDominioItens = _ccCombo.dm(wRotinaCarga.substr(2, 2).toLocaleLowerCase(), "", wRotinaCarga.substr(5, wRotinaCarga.length), "", "", 7);
                         wHtml += `
-                            <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
-                                <div class="form-group position-relative">
-                                    <div>
-                                        <label for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>
-                                        <select name='anResposta' data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-control" placeholder="">${wMDominioItens}</select>
+                                <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                                    <div class="form-group position-relative">
+                                        <div>
+                                            <label for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>
+                                            <select name='anResposta' data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-control" placeholder="">${wMDominioItens}</select>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>                            
-                                `;
+                                </div>                            
+                                    `;
                     }
                     break;
                 case 10: // RADIO
@@ -259,20 +241,20 @@ var _ccsyscareScript = function () {
                         wRotinaCarga = JSON.parse(wRotinaCarga)
                         wMOptions = Object.getOwnPropertyNames(wRotinaCarga)
                         wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">
-                        ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
+                            ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
                         for (let wIdx = 0; wIdx < wMOptions.length; wIdx++) {
                             wHtml += `
-                                <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
-                                    <div class="form-group position-relative">
-                                        <div class="form-check">
-                                            <input data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' 
-                                            data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' 
-                                            class="form-check-input" type="radio" name="anResposta" id="flexRadioDefault2" value="${wMOptions[wIdx]}"/>
-                                            <label  class="form-check-label" for="anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
+                                    <div class="cc-inp  cc-col cc-col-${wColspan}" style="background-color:white">
+                                        <div class="form-group position-relative">
+                                            <div class="form-check">
+                                                <input data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' 
+                                                data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' 
+                                                class="form-check-input" type="radio" name="anResposta" id="flexRadioDefault2" value="${wMOptions[wIdx]}"/>
+                                                <label  class="form-check-label" for="anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>  
-                                        `;
+                                    </div>  
+                                            `;
                         }
                     }
                     break;
@@ -287,12 +269,12 @@ var _ccsyscareScript = function () {
         buttonAnterior: async function (pItem) {
             var wScriptItem = regulacaoScript[pItem]
             var wHtmlAnterior = `<div class=" cc-btn-col  cc-col cc-col-3  ">
-                                    <button data-script-btn-anterior='true' data-script-btn-omt-index='${wScriptItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
-                                        <i class="fas fa-arrow-left"></i>
-                                        Anterior
-                                    </button>
-                                </div>
-                            `;
+                                        <button data-script-btn-anterior='true' data-script-btn-omt-index='${wScriptItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                    </div>
+                                `;
             return wHtmlAnterior
         },
 
@@ -300,12 +282,12 @@ var _ccsyscareScript = function () {
             var wScriptItem = regulacaoScript[pItem]
             //console.log(wScriptItem);
             var wHtmlProximo = `<div class=" cc-btn-col  cc-col cc-col-3  ">
-                                    <button data-script-btn-proximo='true' data-script-btn-omt-index='${wScriptItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
-                                        <i class="fas fa-arrow-right"></i>
-                                        Próximo
-                                    </button>
-                                </div>
-                            `;
+                                        <button data-script-btn-proximo='true' data-script-btn-omt-index='${wScriptItem}'data-script-btn-omt='${wScriptItem.cnRegulacaoScript}'  data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block  cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+                                            <i class="fas fa-arrow-right"></i>
+                                            Próximo
+                                        </button>
+                                    </div>
+                                `;
             return wHtmlProximo
         },
 
@@ -313,37 +295,37 @@ var _ccsyscareScript = function () {
             var wScriptItem = regulacaoScript[pItem]
             var wHtmlButtons = (pItem == 0) ? await _ccSyscare1.monta.buttonProximo(pItem) : (regulacaoScript[pItem].boScriptFim == 1) ? await _ccSyscare1.monta.buttonAnterior(pItem) : await _ccSyscare1.monta.buttonAnterior(pItem) + await _ccSyscare1.monta.buttonProximo(pItem)
             $("[name='data-buttons-script']").html(`
-                <div class="cc-col w-100" style="background-color:white">
-                    <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
-                        ${wHtmlButtons}
+                    <div class="cc-col w-100" style="background-color:white">
+                        <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
+                            ${wHtmlButtons}
+                        </div>
+                        <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
+                            <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
+                            <textarea value="" maxlength="5000" name="anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
+                            data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
+                        </div>
+                        <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                                FINALIZAR
+                            </button>
+                        </div>
                     </div>
-                    <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
-                        <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
-                        <textarea value="" maxlength="5000" name="anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                        data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
-                    </div>
-                    <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
-                        <button data-script-btn-finalizar='true' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
-                            FINALIZAR
-                        </button>
-                    </div>
-                </div>
-            `);
+                `);
 
         }
     }
 
-    this.inicia = async function () {
+    inicia = async function () {
         await _ccSyscare1.monta.htmlCabecalho()
         await _ccSyscare1.listen.clickScript()
     }
 
-    this.busca = {
+    busca = {
         buscaRegulacaoScript: async function () {
             var wTabelaNome = "shcregulacaoscript"
             var wJsn = `{
-                obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
-            }`;
+                    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
+                }`;
             var wAjaxURI = _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsn);
             return await $.when(wAjaxURI).then(
                 async function (jsonRespObj) {
@@ -367,8 +349,8 @@ var _ccsyscareScript = function () {
             wColunas +=
                 ",anInstrucoes,anDirecionamentoCondicional,cnDirecionamentoScript,cnDirecionamentoScriptItem,boScriptFim,boRequerido,qtInteracaoColspan";
             var wJsnObjScriptItem = `{
-                    obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=" + wColunas + "&orderby=nrOrdem&where=cnRegulacaoScript=" + pScript), +1, 10, 0, 0, 1)}'
-                }`;
+                        obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=" + wColunas + "&orderby=nrOrdem&where=cnRegulacaoScript=" + pScript), +1, 10, 0, 0, 1)}'
+                    }`;
             console.log(wJsonScriptRegulacao);
             wJsonScriptRegulacao["" + pScript + ""] = (wJsonScriptRegulacao["" + pScript + ""]) ? wJsonScriptRegulacao["" + pScript + ""] : {};
 
@@ -379,25 +361,26 @@ var _ccsyscareScript = function () {
                     _cc.validaResultadoAjax(jsonScriptItem);
                     var wData = jsonScriptItem.data;
                     wHtml = `
-                        <div class="">                               
-                            <div class="p-1 mt-2" name="data-conteudo-script">
+                            <div class="">                               
+                                <div class="p-1 mt-2" name="data-conteudo-script">
+                                </div>
+                                <div class="p-1" name="data-buttons-script" >
+                                </div>
                             </div>
-                            <div class="p-1" name="data-buttons-script" >
-                            </div>
-                        </div>
-                        `;
+                            `;
                     $("[name='fme-scripts']").html(wHtml);
-                    //console.log("vai filhao", wData);
+                    console.log("vai filhao", wData);
                     window.regulacaoScript = wData
                     _ccSyscare1.cria(0)
                 })
         }
     }
 
-    this.cria = async function (pItem, pBoDesc) {
+    cria = async function (pItem, pBoDesc) {
         _ccSyscare1.listen.clickProximo()
         _ccSyscare1.listen.clickAnterior()
         _ccSyscare1.listen.clickItem()
+        _ccSyscare1.listen.clickFinalizar()
         debugger
         pItem = parseInt(pItem)
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);
@@ -412,7 +395,7 @@ var _ccsyscareScript = function () {
                     return
                 } else {
                     /* REMOVE RESPOSTA SALVA */
-                    delete wScriptRegulacao
+                    delete (wScriptRegulacao)
                     /** TERNÁRIO */
                     var wItem = pBoDesc ? (wScriptItem--) : wScriptItem++;
                     console.log(wItem);
@@ -422,34 +405,32 @@ var _ccsyscareScript = function () {
         }
         var wHtmScriptItem = await _ccSyscare1.monta.htmlInput(pItem);
         /* APPEND HTML  */
-        
+
         $("[name='data-conteudo-script']").html(wHtmScriptItem);
         //console.log("append");
         await _ccSyscare1.monta.htmlButtons(pItem)
-        
+
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
         //console.log("wScriptRegulacao ", wScriptRegulacao);
-        if (!_ccSyscare1.listen.clickFinalizar()) {
-            if (wScriptRegulacao) {
-                var wInteracaoValor = wScriptRegulacao["anResposta"]
-                var wObservacaoValor = wScriptRegulacao["anOBS"]
-                console.log(wObservacaoValor, "||", wInteracaoValor);
-                /** SE JÁ TIVER VALOR SALVO */
-                if (wInteracaoValor) {
-                    var wInteracaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anResposta']`);
-                    (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true) : wInteracaoHtm.val(wInteracaoValor);
-                }
+        if (wScriptRegulacao) {
+            var wInteracaoValor = wScriptRegulacao["anResposta"]
+            var wObservacaoValor = wScriptRegulacao["anOBS"]
+            console.log(wObservacaoValor, "||", wInteracaoValor);
+            /** SE JÁ TIVER VALOR SALVO */
+            if (wInteracaoValor) {
+                var wInteracaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anResposta']`);
+                (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][value='${wInteracaoValor}']`).attr('checked', true) : wInteracaoHtm.val(wInteracaoValor);
+            }
 
-                if (wObservacaoValor) {
-                    var wObservacaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anObservacao']`);
-                    wObservacaoHtm.val(wObservacaoValor);
-                }
+            if (wObservacaoValor) {
+                var wObservacaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anObservacao']`);
+                wObservacaoHtm.val(wObservacaoValor);
             }
         }
+
         wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
     }
 }
 
 var _ccSyscare1 = new _ccsyscareScript();
-
-await _ccSyscare1.inicia()
+_ccSyscare1.inicia()

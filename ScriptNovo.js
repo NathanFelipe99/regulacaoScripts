@@ -4,24 +4,22 @@
         var wVetor = []
         var wQtdMin
 
-        function fTimeMachine(pItem){    
+        function fTimeMachine(){    
             let wMilSec = moment(moment(), "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
             let wDuration = moment.duration(wMilSec);
-            var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
-            
+            let wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
             if(wJson['qtMin'] != '') wQtdMin = wJson['qtMin']; 
-            
-            /* === preenchida ao clicar no "botão proximo"  === */
-            var proximo  = ccDateTime('00/00/0000 ' + wSeconds);
 
-            // var anterior  = ccDateTime('00/00/0000 ' + wQtdMin? wQtdMin : '');
+            /* === preenchida ao clicar no "botão proximo"  === */
+            let proximo  = ccDateTime('00/00/0000 ' + wSeconds);
+           
             if(wQtdMin){
-                var anterior =  ccDateTime('00/00/0000 ' + wQtdMin)
+                let anterior =  ccDateTime('00/00/0000 ' + wQtdMin)
                 wJson['qtMin'] = anterior.addMilliseconds(wMilSec).toString('HH:mm:ss')
             }else{
                 wJson['qtMin'] =proximo.toString('HH:mm:ss');
-            } 
-        
+            }
+                 
         }
 
         this.limpa = async function (pScriptItem) {
@@ -56,7 +54,7 @@
 
         this.monta = {
             htmlCabecalho: async () => {
-                var wData = await _ccSyscare1.busca.buscaRegulacaoScript()
+                var wData = await _ccSyscare1.busca.buscaRegulacaoScript();
                 var wHtml = "";
                 for (let wIdx = 0; wIdx < wData.length; wIdx++) {
                     const wScript = wData[wIdx];
@@ -202,7 +200,7 @@
                             data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
                         </div>
                         <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
-                            <button data-script-btn-finalizar='true' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                            <button data-script-btn-finalizar='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
                                 FINALIZAR
                             </button>
                         </div>
@@ -247,9 +245,7 @@
             clickScript: async () => {
                 $(document).off(cc.evento.click, "[data-btn-script='true']");
                 $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-
                     await _ccSyscare1.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
-
                 });
             },
 
@@ -258,7 +254,7 @@
                 $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
                     var wScriptCodigo = $(this).attr("data-script-omt");
                     var wScriptItem = $(this).attr("data-script-omt-item");
-
+                    console.log("blur 1");
                     var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`);
                     var wValorInteracao = wInteracaoHtm.attr("data-interacao-tp") == "10" ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
                     var wValorObservacao = $("[name='anObservacao']").val()
@@ -285,20 +281,16 @@
                     
                     _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
 
-                    /* ======== CONTROLE QUANTIDADE DE MINUTOS ======== */
-                    fTimeMachine(wScriptItem)
+                    if(wVetor.length >= 0) wVetor = []
 
-                    if( wVetor.length >= 0) {
-                        wVetor = []
-                    }
+                    /* === CHAMA FUNÇÃO PARA TRATAR OS MINUTOS ====*/
+                    fTimeMachine()
 
                     var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
                     //debugger
                     for (let wIdx = 0; wIdx < wJsonLength ; wIdx++) {
                         const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
-
                         var wMItens = Object.getOwnPropertyNames(wJsonScriptRegulacao["" + element + ""]);
-                        
                         for (let wIdx2 = 0; wIdx2 < wMItens.length; wIdx2++) {
                             let wAjaxJson = {
                                 cnRegulacao: wJsonScriptRegulacao[element][wMItens[wIdx2]]["cnRegulacao"],
@@ -318,6 +310,7 @@
                                 anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
                             }
                             wVetor.push(wAjaxJson);
+                            wQtdMin = ''
                             //console.log("VETOR", wVetor);
                         }
                         console.log("VETOR", wVetor);
@@ -347,13 +340,14 @@
             clickFinalizar: async () => {
                 let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
                 let wSaveMthd = "post";
+                
+                debugger
                 $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
                 $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                    if (_ccSyscare1.listen.clickItem && !(_ccSyscare1.listen.clickProximo || _ccSyscare1.listen.clickAnterior)) {
                         var wScriptItem = $(this).attr("data-script-btn-omt-item");
                         var wScriptCodigo = $(this).attr("data-script-btn-omt");
                         _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
-                    }
+
                     for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
                         //console.log(wVetor.length);
                         await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
@@ -365,8 +359,8 @@
                         });
                     }
                     wVetor = [];
-                    var wItem = $(this).attr("data-script-omt-item")
-                    //console.log(wItem);
+                    var wItem = $(this).attr("data-script-btn-omt-item")
+                    console.log(wItem);
                     await _ccSyscare1.limpa(wItem)
                     _ccSyscare1.cria(0)
                 });
@@ -438,6 +432,7 @@
             _ccSyscare1.listen.clickProximo()
             _ccSyscare1.listen.clickAnterior()
             _ccSyscare1.listen.clickItem()
+            _ccSyscare1.listen.clickFinalizar()
         
             pItem = parseInt(pItem)
             pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);

@@ -198,10 +198,10 @@
                         <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
                             <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
                             <textarea value="" maxlength="5000" name="anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                            data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
+                            data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
                         </div>
                         <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
-                            <button data-script-btn-finalizar='true' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                            <button data-script-btn-finalizar='true' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
                                 FINALIZAR
                             </button>
                         </div>
@@ -210,15 +210,11 @@
 
             },
 
-            montaJson: (pScriptCodigo,pScriptItem) => {
-                //
-                var wScriptCodigo = pScriptCodigo;
+            montaJson: (pScriptCodigo, pScriptItem) => {
+                var wScriptCodigo = pScriptCodigo
                 var wScriptItem = pScriptItem;
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
                 var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
-                
-                /* SE REQUERIDO */
-
                 var wValorObservacao = $("[name='anObservacao']").val()
                 wJson = {
                     cnRegulacao: $("[name='cnRegulacao']").val(), //campo na tela
@@ -228,7 +224,7 @@
                     dtFinal: "", // momento em que o script é finalizado
                     qtMin: '', // dtFinal - dtInicio
                     cnRegulacaoScript: wScriptCodigo,
-                    cnRegulacaoScriptItem: wScriptItem,
+                    csRegulacaoScriptItem: wScriptItem,
                     cnProfissional: $("[name='cnProfissional']").val(), //Profissional que está fazendo as perguntas?
                     anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
                     dtPergunta: "", //momento em que a pergunta foi aberta
@@ -349,28 +345,26 @@
 
                 $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
                 $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                    if (_ccSyscare1.listen.clickItem && !(_ccSyscare1.listen.clickProximo || _ccSyscare1.listen.clickAnterior)) {
-                        var wScriptItem = $(this).attr("data-script-btn-omt-item");
-                        var wScriptCodigo = $(this).attr("data-script-btn-omt");
-                        _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
+                    var wScriptItem = $(this).attr("data-script-btn-omt-item");
+                    var wScriptCodigo = $(this).attr("data-script-btn-omt");
+                    console.log(wScriptItem,wScriptCodigo)
 
-                        console.log('aqui')
-                    }
-
-                    console.log('lá')
+                    _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
+                    wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem])
+                    console.log(wVetor)
                     for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
-                        //console.log(wVetor.length);
+                        var ww = wVetor[wIdx3]
+                        console.log(ww)
                         await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
                             console.log("DATA RESULT: ", result);
-                            // apresenta mensagem de sucesso ao salvar
-                            _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
+                            // apresenta mensagem de sucesso ao salva
+                            if(result.cnRetorno == 0) _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")                            
                         }).catch((err) => {
                             console.log(err);
                         });
                     }
                     wVetor = [];
                     var wItem = $(this).attr("data-script-omt-item")
-                    //console.log(wItem);
                     await _ccSyscare1.limpa(wItem)
                     _ccSyscare1.cria(0)
                 });

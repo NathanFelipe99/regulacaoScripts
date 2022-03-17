@@ -4,24 +4,23 @@
         var wVetor = []
         var wQtdMin
 
-        function fTimeMachine(pItem){    
+        function fTimeMachine(){    
             let wMilSec = moment(moment(), "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
             let wDuration = moment.duration(wMilSec);
-            var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
-                    
+            let wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
+          
             if(wJson['qtMin'] != '') wQtdMin = wJson['qtMin']; 
-            
-            /* === preenchida ao clicar no "botão proximo"  === */
-            var proximo  = ccDateTime('00/00/0000 ' + wSeconds);
 
-            // var anterior  = ccDateTime('00/00/0000 ' + wQtdMin? wQtdMin : '');
+            /* === preenchida ao clicar no "botão proximo"  === */
+            let proximo  = ccDateTime('00/00/0000 ' + wSeconds);
+           
             if(wQtdMin){
-                var anterior =  ccDateTime('00/00/0000 ' + wQtdMin)
+                let anterior =  ccDateTime('00/00/0000 ' + wQtdMin)
                 wJson['qtMin'] = anterior.addMilliseconds(wMilSec).toString('HH:mm:ss')
             }else{
                 wJson['qtMin'] =proximo.toString('HH:mm:ss');
-            } 
-        
+            }
+                 
         }
 
         this.limpa = async function (pScriptItem) {
@@ -56,7 +55,7 @@
 
         this.monta = {
             htmlCabecalho: async () => {
-                var wData = await _ccSyscare1.busca.buscaRegulacaoScript()
+                var wData = await _ccSyscare1.busca.buscaRegulacaoScript();
                 var wHtml = "";
                 for (let wIdx = 0; wIdx < wData.length; wIdx++) {
                     const wScript = wData[wIdx];
@@ -285,16 +284,10 @@
                     
                     _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
 
-                    /* ======== CONTROLE QUANTIDADE DE MINUTOS ======== */
-                    fTimeMachine(wScriptItem)
-                    
-                    
-                    
+                    if( wVetor.length >= 0) wVetor = []
 
-
-                    if( wVetor.length >= 0) {
-                        wVetor = []
-                    }
+                    /* === CHAMA FUNÇÃO PARA TRATAR OS MINUTOS ====*/
+                    fTimeMachine()
 
                     var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
                     //debugger
@@ -322,6 +315,7 @@
                                 anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
                             }
                             wVetor.push(wAjaxJson);
+                            wQtdMin = ''
                             //console.log("VETOR", wVetor);
                         }
                         console.log("VETOR", wVetor);
@@ -351,6 +345,8 @@
             clickFinalizar: async () => {
                 let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
                 let wSaveMthd = "post";
+                
+
                 $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
                 $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
                     if (_ccSyscare1.listen.clickItem && !(_ccSyscare1.listen.clickProximo || _ccSyscare1.listen.clickAnterior)) {

@@ -1,4 +1,4 @@
-function ControllTime(){
+function fTimeMachine(){
   var wIncialTime = moment().format('DD/MM/YYYY HH:mm:ss') 
 
   $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {

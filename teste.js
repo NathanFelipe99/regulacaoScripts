@@ -1,6 +1,6 @@
 var wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
     
-function anterior(){    
+function fTimeMachine(){    
 
   let wMilSec = moment(moment(), "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
   let wDuration = moment.duration(wMilSec);
@@ -17,7 +17,7 @@ function anterior(){
  
 }
 
-anterior()
+fTimeMachine()
 
 
   

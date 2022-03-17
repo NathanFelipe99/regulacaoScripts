@@ -353,7 +353,11 @@
                         var wScriptItem = $(this).attr("data-script-btn-omt-item");
                         var wScriptCodigo = $(this).attr("data-script-btn-omt");
                         _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
+
+                        console.log('aqui')
                     }
+
+                    console.log('lá')
                     for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
                         //console.log(wVetor.length);
                         await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
@@ -370,7 +374,7 @@
                     await _ccSyscare1.limpa(wItem)
                     _ccSyscare1.cria(0)
                 });
-            }
+            },
         }
 
         this.busca = {
@@ -438,6 +442,7 @@
             _ccSyscare1.listen.clickProximo()
             _ccSyscare1.listen.clickAnterior()
             _ccSyscare1.listen.clickItem()
+            _ccSyscare1.listen.clickFinalizar()
         
             pItem = parseInt(pItem)
             pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);

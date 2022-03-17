@@ -3,6 +3,7 @@ function fClausula(pScript, pCondicional) {
     var wCondicional = pCondicional;
     var wMClausulas = wCondicional.split("&&");
     var wRetornoClausula = " ";
+    
     for (let wIdx = 0; wIdx < wMClausulas.length; wIdx++) {
         var wItemClausula = wMClausulas[wIdx];
         if (wIdx > 0) wRetornoClausula += " && ";
@@ -14,17 +15,15 @@ function fClausula(pScript, pCondicional) {
         let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
         wRetornoClausula += ` '${wMScriptItemCondicional["value"]}' ${wOperador} ${wValor2} `;
     }
+    
     return wRetornoClausula;
 }
 
-var wQtdMinutosInicio ;
+var wQtdMinutosInicio ;//Variável para controlar o tempo inicial de cada questão
 
 function fMontaScript(wItem, pBoDesc) {
     console.log('MontaScript')
-   
-    wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss')
-
-    console.log(wQtdMinutosInicio);
+    wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
     
     wItem = parseInt(wItem)
     var wScriptItem = richardScript[wItem];
@@ -193,6 +192,7 @@ function fMontaScript(wItem, pBoDesc) {
 
 window.wJsonScriptRegulacao = {}
 wTabelaNome = "shcregulacaoscript"
+
 var wJsn = `{
                 obj : '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabelaNome + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
             }`;
@@ -294,7 +294,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     let wEndTime  = moment().format('DD/MM/YYYY HH:mm:ss');
     let wMilSec = moment(wEndTime,"DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio,"DD/MM/YYYY HH:mm:ss"));
     let wDuration = moment.duration(wMilSec);
-    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format(":mm:ss");
+    var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("h:mm:ss");
 
     wJson['qtMin'] = wSeconds
     
@@ -331,6 +331,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
                 dtResposta: wJsonScriptRegulacao[element][wMItens[wIdx2]]["dtResposta"],
                 anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
             }
+            
         console.log('jason', wAjaxJson);
         wVetor.push(wAjaxJson);
 
@@ -353,6 +354,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
     }
     }
 });
+
 
 $(document).off(cc.evento.click, "[data-script-btn-proximo='true']");
 $(document).on(cc.evento.click, "[data-script-btn-proximo='true']", function() {

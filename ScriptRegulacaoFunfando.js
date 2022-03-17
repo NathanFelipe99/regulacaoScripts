@@ -24,6 +24,7 @@ var _ccsyscareScript = function () {
     }
 
     this.condiciona = function (pScriptItem, pCondicional) {
+        debugger
         var wScript = parseInt(pScriptItem);
         var wCondicional = pCondicional;
         var wMClausulas = wCondicional.split("&&");
@@ -39,6 +40,7 @@ var _ccsyscareScript = function () {
             let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
             wRetornoClausula += ` '${wMScriptItemCondicional["anResposta"]}' ${wOperador} ${wValor2} `;
         }
+        debugger
         return wRetornoClausula;
     }
 

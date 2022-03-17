@@ -278,7 +278,7 @@ var _ccSyscareScript = function () {
                }
 
                 var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
-                debugger
+                //debugger
                 for (let wIdx = 0; wIdx < wJsonLength ; wIdx++) {
                     const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
 
@@ -383,7 +383,7 @@ var _ccSyscareScript = function () {
             //console.log(wScriptCodigo);
             var wTabelaNome = "shcregulacaoscriptitem"
             var wColunas =
-                "cnRegulacaoScript,csRegulacaoScriptItem,nrOrdem,anInteracaoTexto,cnInteracaoTP,qtInteracaoTamanho,qtInteracaoOpcao,anInteracaoCondicional";
+                "cnRegulacaoScript, csRegulacaoScriptItem, nrOrdem, anInteracaoTexto, cnInteracaoTP,qtInteracaoTamanho,qtInteracaoOpcao,anInteracaoCondicional ";
             wColunas +=
                 ",anInstrucoes,anDirecionamentoCondicional,cnDirecionamentoScript,cnDirecionamentoScriptItem,boScriptFim,boRequerido,qtInteracaoColspan";
             var wJsnObjScriptItem = `{
@@ -426,11 +426,13 @@ var _ccSyscareScript = function () {
        
         pItem = parseInt(pItem)
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);
-        debugger
+        //debugger
         var wScriptItem = regulacaoScript[pItem];
+        // console.log(wScriptItem.anInteracaoCondicional);
         if (wScriptItem.anInteracaoCondicional) {
-            debugger
+            console.log("DATA ",wScriptItem.anInteracaoCondicional);
             var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
+            console.log("wClausula ",wClausula);
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {
                     $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
@@ -438,12 +440,14 @@ var _ccSyscareScript = function () {
                 } else {
                     /* REMOVE RESPOSTA SALVA */
                     delete wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]
+                   
                     /** TERNÁRIO */
-                    pBoDesc ? _ccSyscare1.cria(wScriptItem - 1) : _ccSyscare1.cria(wScriptItem + 1)
+                    pBoDesc ?  _ccSyscare1.cria(pItem - 1) : _ccSyscare1.cria(pItem + 1);
+                    return 
                 }
             }
         }
-        debugger
+        
         var wHtmScriptItem = await _ccSyscare1.monta.htmlInput(pItem);
         
         /* APPEND HTML  */

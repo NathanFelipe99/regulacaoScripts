@@ -331,6 +331,7 @@ $(document).on(cc.evento.blur, "[data-script-omt-item]", function() {
                 dtResposta: wJsonScriptRegulacao[element][wMItens[wIdx2]]["dtResposta"],
                 anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
             }
+            
         console.log('jason', wAjaxJson);
         wVetor.push(wAjaxJson);
 

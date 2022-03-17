@@ -190,13 +190,12 @@ var _ccSyscareScript = function () {
 
         },
 
-        montaJson: (pScriptCodigo,pScriptItem) => {
+        montaJson: (pScriptCodigo, pScriptItem) => {
             //debugger
             var wScriptCodigo = pScriptCodigo;
             var wScriptItem = pScriptItem;
             var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
             var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
-            debugger
             /* SE REQUERIDO */
 
             var wValorObservacao = $("[name='anObservacao']").val()
@@ -269,6 +268,7 @@ var _ccSyscareScript = function () {
                 // let wDuration = moment.duration(wMilSec);
                 // var wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
                 // wJson['qtMin'] = wSeconds.toString()
+                debugger
                 var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
                 for (let wIdx = 0; wIdx < wJsonLength; wIdx++) {
                     const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
@@ -293,9 +293,10 @@ var _ccSyscareScript = function () {
                             anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
                         }
                         wVetor.push(wAjaxJson);
-                        console.log("VETOR", wVetor);
+                        
                     }
                 }
+                debugger
                 _ccSyscare1.cria(parseInt(wScriptItem))
             })
         },
@@ -306,6 +307,7 @@ var _ccSyscareScript = function () {
                 console.log('btn anterior');
                 try {
                     //var wScriptCodigo = $(this).attr("data-script-btn-omt");
+                    wVetor = await wVetor.pop()
                     var wScriptItem = $(this).attr("data-script-btn-omt-item") - 1;
                     _ccSyscare1.cria(wScriptItem - 1, "desc")
 
@@ -414,7 +416,7 @@ var _ccSyscareScript = function () {
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);
         var wScriptItem = regulacaoScript[pItem];
         debugger
-        if (wScriptItem.anInteracaoCondicional) {
+        if (wScriptItem.anInteracaoCondicional != "") {
             var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {

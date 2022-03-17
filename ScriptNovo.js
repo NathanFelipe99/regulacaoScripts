@@ -415,7 +415,7 @@ var _ccSyscareScript = function () {
         var wScriptItem = regulacaoScript[pItem];
         debugger
         if (wScriptItem.anInteracaoCondicional) {
-            var wClausula = _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
+            var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {
                     $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
@@ -435,8 +435,8 @@ var _ccSyscareScript = function () {
         /* APPEND HTML  */
         debugger
         $("[name='data-conteudo-script']").html(wHtmScriptItem);
-        //console.log("append");
-        console.log("wScriptRegulacao ", wScriptRegulacao);
+        // console.log("wScriptRegulacao ", wScriptRegulacao);
+        await _ccSyscare1.monta.htmlButtons(pItem)
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
         debugger
         if (_ccSyscare1.listen.clickAnterior() || !_ccSyscare1.listen.clickFinalizar()) {
@@ -456,7 +456,7 @@ var _ccSyscareScript = function () {
                 }
             }
         }
-        await _ccSyscare1.monta.htmlButtons(pItem)
+        
 
         wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
     }

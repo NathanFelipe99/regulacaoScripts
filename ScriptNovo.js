@@ -227,7 +227,7 @@
                     dtFinal: "", // momento em que o script é finalizado
                     qtMin: '', // dtFinal - dtInicio
                     cnRegulacaoScript: wScriptCodigo,
-                    cnRegulacaoScriptItem: wScriptItem,
+                    csRegulacaoScriptItem: wScriptItem,
                     cnProfissional: $("[name='cnProfissional']").val(), //Profissional que está fazendo as perguntas?
                     anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
                     dtPergunta: "", //momento em que a pergunta foi aberta

@@ -19,16 +19,10 @@
             }else{
                 wJson['qtMin'] =proximo.toString('HH:mm:ss');
             }
-                 
         }
 
-        this.limpa = async function (pScriptItem) {
-            var wScriptItem = pScriptItem
-            for (wScriptItem; wScriptItem > 0; wScriptItem--) {
-                $("[name='anRespondedor']").val("")
-                $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anResposta']`).attr("value", "");
-                $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='anObservacao']`).attr("value", "");
-            }
+        this.limpa = async function () {
+            $("[name='fme-scripts']").empty()
         }
 
         this.condiciona = async function (pScriptItem, pCondicional) {
@@ -53,7 +47,8 @@
         }
 
         this.monta = {
-            htmlCabecalho: async () => {
+            htmlCabecalho: async (pObjReferencia) => {
+                cLower(pObjReferencia)
                 var wData = await _ccSyscare1.busca.buscaRegulacaoScript();
                 var wHtml = "";
                 for (let wIdx = 0; wIdx < wData.length; wIdx++) {
@@ -61,8 +56,8 @@
                     //console.log(wScript);
                     wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
                 }
-                $("[name='frmshc.paginaprincipal']").html(`                   
-                    <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs">
+                $("[name='"+pObjReferencia+"']").html(`                   
+                    <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs" id="id-thanthan">
                         <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white;">
                         <div class="m-4">
                                 <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
@@ -341,30 +336,29 @@
                 let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
                 let wSaveMthd = "post";
                 
-                debugger
                 $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
                 $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                        var wScriptItem = $(this).attr("data-script-btn-omt-item");
-                        var wScriptCodigo = $(this).attr("data-script-btn-omt");
-                        _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
+                    var wScriptItem = $(this).attr("data-script-btn-omt-item"),
+                    wScriptCodigo = $(this).attr("data-script-btn-omt");
+                    _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem)
+                    wVetor.length!=0?(wVetor):(wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem]))
 
-                    _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
-                    wVetor.push(wJsonScriptRegulacao[wScriptCodigo])
-                    console.log(wVetor)
                     for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
-                        //console.log(wVetor.length);
                         await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
                             console.log("DATA RESULT: ", result);
-                            // apresenta mensagem de sucesso ao salvar
-                            _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
+                            if(result.cnRetorno !=0){
+                                _cc.msg("Erro ao Salvar!!", "danger")
+                                console.error(result.anMensagem)
+                            }else{
+                                _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
+                            }
                         }).catch((err) => {
                             console.log(err);
                         });
                     }
+
                     wVetor = [];
-                    var wItem = $(this).attr("data-script-btn-omt-item")
-                    console.log(wItem);
-                    await _ccSyscare1.limpa(wItem)
+                    await _ccSyscare1.limpa()
                     _ccSyscare1.cria(0)
                 });
             }
@@ -426,8 +420,8 @@
             }
         }
 
-        this.inicia = async function () {
-            await _ccSyscare1.monta.htmlCabecalho()
+        this.inicia = async function (pObjReferencia) {
+            await _ccSyscare1.monta.htmlCabecalho(pObjReferencia)
             await _ccSyscare1.listen.clickScript()
         }
 
@@ -470,7 +464,7 @@
             await _ccSyscare1.monta.htmlButtons(pItem)
             var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
             
-            if (_ccSyscare1.listen.clickAnterior() || !_ccSyscare1.listen.clickFinalizar()) {
+            
                 if (wScriptRegulacao) {
                     var wInteracaoValor = wScriptRegulacao["anResposta"]
                     var wObservacaoValor = wScriptRegulacao["anOBS"]                    
@@ -485,7 +479,7 @@
                         wObservacaoHtm.val(wObservacaoValor);
                     }
                 }
-            }
+        
             
 
             wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
@@ -493,5 +487,3 @@
         }
     }
     var _ccSyscare1 = new _ccSyscareScript();
-
-    await _ccSyscare1.inicia();

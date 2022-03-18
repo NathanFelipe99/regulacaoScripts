@@ -24,6 +24,7 @@ var _ccsyscareScript = function () {
     }
 
     this.condiciona = function (pScriptItem, pCondicional) {
+        debugger
         var wScript = parseInt(pScriptItem);
         var wCondicional = pCondicional;
         var wMClausulas = wCondicional.split("&&");
@@ -39,6 +40,7 @@ var _ccsyscareScript = function () {
             let wMScriptItemCondicional = wJsonScriptRegulacao["" + wScript + ""]["" + wScriptItem + ""] || {}
             wRetornoClausula += ` '${wMScriptItemCondicional["anResposta"]}' ${wOperador} ${wValor2} `;
         }
+        debugger
         return wRetornoClausula;
     }
 
@@ -114,7 +116,7 @@ var _ccsyscareScript = function () {
             _ccSyscare1.listen.clickFinalizar();
             $(document).off(cc.evento.blur, "[data-script-omt-item]");
             $(document).on(cc.evento.blur, "[data-script-omt-item]", function () {
-
+                console.log("blur 1");
                 var wScriptCodigo = $(this).attr("data-script-omt");
                 var wScriptItem = $(this).attr("data-script-omt-item");
 

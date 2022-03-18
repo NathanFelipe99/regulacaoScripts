@@ -350,7 +350,7 @@
                     console.log(wScriptItem,wScriptCodigo)
 
                     _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
-                    wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem])
+                    wVetor.push(wJsonScriptRegulacao[wScriptCodigo])
                     console.log(wVetor)
                     for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
                         var ww = wVetor[wIdx3]

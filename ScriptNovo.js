@@ -478,9 +478,9 @@ var _ccSyscareScript = function () {
                     $("[name='fme-scripts']").html(wHtml);
                     window.regulacaoScript = wData;
                     //console.log("regulacaoScript");
-                    //console.log(regulacaoScript);                    
+                    console.log(regulacaoScript);                    
                     var wDirecionaAnt = regulacaoScript.findIndex(index => index.csRegulacaoScriptItem == wScriptItem)
-                    //console.log(wDirecionaAnt);                    
+                    console.log(wDirecionaAnt);                    
                     (!wScriptItem) ? _ccSyscare1.cria(0) : pBoScriptAnterior ? _ccSyscare1.cria(wDirecionaAnt) : _ccSyscare1.cria('', '', wScriptItem - 1)
                     //console.log(wScriptItem);
                 })
@@ -498,13 +498,13 @@ var _ccSyscareScript = function () {
         _ccSyscare1.listen.clickAnterior()
         _ccSyscare1.listen.clickItem()
         _ccSyscare1.listen.clickFinalizar()
-        debugger
+        //debugger
         pItem = pBoIdx ?  pBoIdx : parseInt(pItem)
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);
         var wScriptItem = regulacaoScript[pItem];
         //console.log(wScriptItem);
         if (wScriptItem.anInteracaoCondicional) {
-            console.log("INTERAÇÃO ---> ", wScriptItem.anInteracaoCondicional);
+            //console.log("INTERAÇÃO ---> ", wScriptItem.anInteracaoCondicional);
             var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)            
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {
@@ -513,14 +513,14 @@ var _ccSyscareScript = function () {
                 } else {
                     /* REMOVE RESPOSTA SALVA */
                     delete wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]
-                    console.log("CABEÇA DE GELO");
+                    //console.log("TANGAMANDÁPIO");
                     /** TERNÁRIO */
                     pBoDesc ? _ccSyscare1.cria(pItem - 1) : _ccSyscare1.cria(pItem + 1);
                     return
                 }
             }
         } 
-        debugger
+        //debugger
         var wHtmScriptItem = await _ccSyscare1.monta.htmlInput(pItem);
 
         /* APPEND HTML  */

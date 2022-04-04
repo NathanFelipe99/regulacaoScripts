@@ -4,7 +4,7 @@ var _ccSyscareScript = function () {
     var wVetor = []
     var wQtdMin
 
-    function fTimeMachine() {        
+    function fTimeMachine() {
         let wMilSec = moment(moment(), "DD/MM/YYYY HH:mm:ss").diff(moment(wQtdMinutosInicio, "DD/MM/YYYY HH:mm:ss"));
         let wDuration = moment.duration(wMilSec);
         let wSeconds = Math.floor(wDuration.asHours()) + moment.utc(wMilSec).format("H:mm:ss");
@@ -21,18 +21,22 @@ var _ccSyscareScript = function () {
         }
     }
 
-    this.limpa = async function () {        
-        $("[name='fme-scripts']").empty()        
+    this.limpa = async function () {
+        //$("[name='fme-scripts']").empty()
+        $("[name='fme-scripts'] inputs").val("")
     }
 
-    this.direciona = async function (pScriptItem, pScriptCodigo) {        
-        var wScriptDirecionamento = pScriptCodigo ? parseInt(pScriptCodigo) : regulacaoScript[parseInt(pScriptItem)].cnDirecionamentoScript        
-        var wItemDirecionamento = pScriptCodigo ? parseInt(pScriptItem) : regulacaoScript[parseInt(pScriptItem)].cnDirecionamentoScriptItem        
+    this.direciona = async function (pScriptItem) {
+        //debugger
+        var wScriptDirecionamento = regulacaoScript[parseInt(pScriptItem)].cnDirecionamentoScript
+        var wItemDirecionamento = regulacaoScript[parseInt(pScriptItem)].cnDirecionamentoScriptItem
+        //console.log(wScriptDirecionamento);
+        //debugger
         await _ccSyscare1.busca.buscaRegulacaoScriptItens(wScriptDirecionamento, wItemDirecionamento);
     }
 
-    this.condiciona = async function (pScript, pCondicional) {
-        var wScript = parseInt(pScript);
+    this.condiciona = async function (pScriptItem, pCondicional) {
+        var wScript = parseInt(pScriptItem);
         var wCondicional = pCondicional;
         var wMClausulas = wCondicional.split("&&");
         var wRetornoClausula = "";
@@ -53,13 +57,13 @@ var _ccSyscareScript = function () {
 
     this.monta = {
         htmlCabecalho: async function (pObjReferencia) {
+            cLower(pObjReferencia)
             var wData = await _ccSyscare1.busca.buscaRegulacaoScript();
             var wHtml = "";
             for (let wIdx = 0; wIdx < wData.length; wIdx++) {
                 const wScript = wData[wIdx];
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
-            // debugger
             $("[name='" + pObjReferencia + "']").html(`                   
                 <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs" id="container-inputs">
                     <div name="mnu-scripts-respondedor" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white;">
@@ -156,7 +160,7 @@ var _ccSyscareScript = function () {
                         wMOptions = Object.getOwnPropertyNames(wRotinaCarga)
                         wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">         
                         ${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>
-                                <div id='container-inputs'> `
+                                 <div id='container-inputs'> `
                         for (let wIdx = 0; wIdx < wMOptions.length; wIdx++) {
                             wHtml += `
                                 <div class="cc-inp cc-col cc-col-${wColspan}" style="background-color:white">
@@ -206,8 +210,9 @@ var _ccSyscareScript = function () {
             var wScriptItem = regulacaoScript[pItem]
             var wHtmlButtons = (pItem == 0) ? await _ccSyscare1.monta.buttonProximo(pItem) : (regulacaoScript[pItem].boScriptFim == 1) ? await _ccSyscare1.monta.buttonAnterior(pItem) : await _ccSyscare1.monta.buttonAnterior(pItem) + await _ccSyscare1.monta.buttonProximo(pItem)
             $("[name='data-buttons-script']").html(`
-                <div class="cc-col w-100" style="background-color:white">                    
-                    <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left">
+                <div class="cc-col w-100" style="background-color:white">
+                    
+                    <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left; ">
                         <label for="anObservacao"><strong>OBSERVAÇÃO</strong></label>
                         <textarea value="" maxlength="5000" name="anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
                         data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
@@ -215,7 +220,7 @@ var _ccSyscareScript = function () {
                     <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%); " id="data-buttons-principal">
                         ${wHtmlButtons}
                     </div>
-                    <div class="cc-btn-col cc-col cc-col-4 mr-3" style="float: right; ">
+                    <div class=" cc-btn-col  cc-col cc-col-4 mr-3" style="float: right; ">
                         <button data-script-btn-finalizar='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
                             FINALIZAR
                         </button>
@@ -248,7 +253,7 @@ var _ccSyscareScript = function () {
                     wValorInteracao = JSON.stringify(wValorInteracao)
                     break
             }
-            /* SE REQUERIDO */            
+            /* SE REQUERIDO */
             var wValorObservacao = $("[name='anObservacao']").val()
             wJson = {
                 cnRegulacao: $("[name='cnRegulacao']").val(), //campo na tela
@@ -267,7 +272,7 @@ var _ccSyscareScript = function () {
                 anResposta: _cc.string.valor(wValorInteracao),
                 anOBS: wValorObservacao,
             };
-            
+
             wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""] = wJson;
         }
     }
@@ -300,8 +305,7 @@ var _ccSyscareScript = function () {
                 var wScriptItem = $(this).attr("data-script-btn-omt-item");
                 var wScriptCodigo = $(this).attr("data-script-btn-omt");
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
-                var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val(); 
-                console.log(wValorInteracao); 
+                var wValorInteracao = (wInteracaoHtm.attr("data-interacao-tp") == '10') ? $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']:checked`).val() : wInteracaoHtm.val();
                 /* SE REQUERIDO */
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (!wValorInteracao || wValorInteracao == "") {
@@ -314,12 +318,12 @@ var _ccSyscareScript = function () {
                 _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem);
 
                 if (wVetor.length >= 0) wVetor = []
-                
+
                 /* === CHAMA FUNÇÃO PARA TRATAR OS MINUTOS ====*/
                 fTimeMachine()
 
                 var wJsonLength = Object.getOwnPropertyNames(wJsonScriptRegulacao).length;
-                
+
                 for (let wIdx = 0; wIdx < wJsonLength; wIdx++) {
                     const element = Object.getOwnPropertyNames(wJsonScriptRegulacao)[wIdx];
                     var wMItens = Object.getOwnPropertyNames(wJsonScriptRegulacao["" + element + ""]);
@@ -341,13 +345,13 @@ var _ccSyscareScript = function () {
                             dtResposta: wJsonScriptRegulacao[element][wMItens[wIdx2]]["dtResposta"],
                             anOBS: "" + wJsonScriptRegulacao[element][wMItens[wIdx2]]["anOBS"] + "",
                         }
-                        //console.log(wAjaxJson["qtMin"]);
+                        console.log(wAjaxJson["qtMin"]);
                         wVetor.push(wAjaxJson);
                         wQtdMin = ''
                     }
                 }
                 console.log("VETOR", wVetor);
-                
+
                 var wDirecionamento = regulacaoScript[wIdxScriptItem].anDirecionamentoCondicional
                 wDirecionamento == 'S' ? _ccSyscare1.direciona(wIdxScriptItem) : _ccSyscare1.cria(parseInt(++wIdxScriptItem))
             })
@@ -355,19 +359,12 @@ var _ccSyscareScript = function () {
 
         clickAnterior: async function () {
             $(document).off(cc.evento.click, "[data-script-btn-anterior='true']");
-            $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async function () {                        
+            $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async function () {
                 fTimeMachine()
-                var wVetorLen = wVetor.length
-                var wScriptCodigo = $(this).attr("data-script-btn-omt")
-                try {                                        
-                    if (wScriptCodigo != wVetor[wVetorLen - 1].cnRegulacaoScript) {                        
-                        wScriptCodigoAnterior = wVetor[wVetorLen - 1].cnRegulacaoScript
-                        wScriptItemAnterior = wVetor[wVetorLen - 1].csRegulacaoScriptItem
-                        _ccSyscare1.busca.buscaRegulacaoScriptItens(wScriptCodigoAnterior, wScriptItemAnterior, "anterior")                        
-                    } else {                    
-                        var wIdxScriptItem = $(this).attr("data-script-btn-omt-index") - 1;
-                        _ccSyscare1.cria(wIdxScriptItem, "desc")
-                    }                
+                
+                try {
+                    var wIdxScriptItem = $(this).attr("data-script-btn-omt-index") - 1;                    
+                    _ccSyscare1.cria(wIdxScriptItem, "desc")
                 } catch (error) {
                     console.error(error);
                 }
@@ -375,12 +372,13 @@ var _ccSyscareScript = function () {
         },
 
         clickFinalizar: async function () {
-            
+
             let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov";
-            let wSaveMthd = "post";            
+            let wSaveMthd = "post";
+
 
             $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']");
-            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {                
+            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
                 var wScriptItem = $(this).attr("data-script-btn-omt-item"),
                     wScriptCodigo = $(this).attr("data-script-btn-omt");
 
@@ -393,28 +391,26 @@ var _ccSyscareScript = function () {
                         return;
                     }
                 }
-                if (wValorInteracao) {
-                    await _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem)
-                    wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem])
-                } 
+                await _ccSyscare1.monta.montaJson(wScriptCodigo, wScriptItem)
                 fTimeMachine()
                 console.log(wJsonScriptRegulacao[wScriptCodigo][wScriptItem]);
                 //wVetor.length != 0 ? (wVetor) : (wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem]))
-                //wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem])
+                wVetor.push(wJsonScriptRegulacao[wScriptCodigo][wScriptItem])
                 console.log(wVetor);
                 for (let wIdx3 = 0; wIdx3 < wVetor.length; wIdx3++) {
-                    await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
-                        console.log("DATA RESULT: ", result)
+                    await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx3]), "", "").then((result) => {
+                        console.log("DATA RESULT: ", result);
                         if (result.cnRetorno != 0) {
-                            _cc.msg("Erro ao salvar!", "danger")
+                            _cc.msg("Erro ao Salvar!!", "danger")
+                            console.error(result.anMensagem)
                         } else {
-                            _cc.msg("Registro salvo com sucesso!", "success")
+                            _cc.msg("Registro(s) Incluído(s) com sucesso!", "success")
                         }
                     }).catch((err) => {
                         console.log(err);
-                    });                
+                    });
                 }
-                
+
                 wVetor = [];
                 await _ccSyscare1.limpa()
                 _ccSyscare1.cria(0)
@@ -443,7 +439,7 @@ var _ccSyscareScript = function () {
             )
         },
 
-        buscaRegulacaoScriptItens: async function (pScript, pScriptItem, pBoScriptAnterior) {
+        buscaRegulacaoScriptItens: async function (pScript, pScriptItem) {
             var wScriptItem = parseInt(pScriptItem)
             var wTabelaNome = "shcregulacaoscriptitem"
             var wColunas =
@@ -472,54 +468,51 @@ var _ccSyscareScript = function () {
                     $("[name='fme-scripts']").html(wHtml);
                     window.regulacaoScript = wData;
                     //console.log("regulacaoScript");
-                    //console.log(regulacaoScript);                    
-                    // var wDirecionaAnt = regulacaoScript.findIndex(index => index.csRegulacaoScriptItem == wScriptItem)
-                    //console.log("rei do cangaço", wVetor);
-                    // var wDirecionaAnt = wVetor.findIndex(index => index.csRegulacaoScriptItem === wScriptItem)
-                    //console.log(wDirecionaAnt);                    
-                    (!wScriptItem) ? _ccSyscare1.cria(0) : pBoScriptAnterior ? _ccSyscare1.cria(wDirecionaAnt) : _ccSyscare1.cria('', '', wScriptItem - 1)
-                    //console.log(wScriptItem);
+                    //console.log(regulacaoScript);
+                    (!wScriptItem) ? _ccSyscare1.cria(0) : _ccSyscare1.cria(wScriptItem)
                 })
         }
     }
 
     this.inicia = async function (pObjReferencia) {
-        await _ccSyscare1.monta.htmlCabecalho(cLower(pObjReferencia))
+        await _ccSyscare1.monta.htmlCabecalho(pObjReferencia)
         await _ccSyscare1.listen.clickScript()
     }
 
-    this.cria = async function (pItem, pBoDesc, pBoIdx) {
+    this.cria = async function (pItem, pBoDesc) {
         //console.log("MONTA ITEM --> ", pItem);
         _ccSyscare1.listen.clickProximo()
         _ccSyscare1.listen.clickAnterior()
         _ccSyscare1.listen.clickItem()
         _ccSyscare1.listen.clickFinalizar()
-        //debugger
-        pItem = pBoIdx ?  pBoIdx : parseInt(pItem)
+
+        pItem = parseInt(pItem)
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false);
         var wScriptItem = regulacaoScript[pItem];
         //console.log(wScriptItem);
+
         if (wScriptItem.anInteracaoCondicional) {
-            //console.log("INTERAÇÃO ---> ", wScriptItem.anInteracaoCondicional);
-            var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)            
+            console.log("INTERAÇÃO ---> ", wScriptItem.anInteracaoCondicional);
+            var wClausula = await _ccSyscare1.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
+            // console.log("wClausula ",wClausula);
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {
-                    $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'Fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
+                    $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
                     return
                 } else {
                     /* REMOVE RESPOSTA SALVA */
                     delete wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]
-                    console.log("TANGAMANDÁPIO");
                     /** TERNÁRIO */
                     pBoDesc ? _ccSyscare1.cria(pItem - 1) : _ccSyscare1.cria(pItem + 1);
                     return
                 }
             }
-        } 
+        }
         //debugger
         var wHtmScriptItem = await _ccSyscare1.monta.htmlInput(pItem);
 
         /* APPEND HTML  */
+
         $("[name='data-conteudo-script']").html(wHtmScriptItem);
         // console.log("wScriptRegulacao ", wScriptRegulacao);
         await _ccSyscare1.monta.htmlButtons(pItem)
@@ -560,8 +553,10 @@ var _ccSyscareScript = function () {
                 wObservacaoHtm.val(wObservacaoValor);
             }
         }
+
         wQtdMinutosInicio = moment().format('DD/MM/YYYY HH:mm:ss');
-        //console.log(wQtdMinutosInicio)
+        console.log(wQtdMinutosInicio)
     }
 }
 var _ccSyscare1 = new _ccSyscareScript();
+_ccSyscare1.inicia('frmshc.paginaprincipal')

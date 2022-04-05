@@ -20,7 +20,7 @@ var _ccSyscareScript = function () {
         } else {
             wJson['qtMin'] = proximo.toString('HH:mm:ss')
         }
-    }
+    }    
 
     this.limpaInputs = async function () {
         for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
@@ -356,7 +356,7 @@ var _ccSyscareScript = function () {
                 var wIdxScriptItem = $(this).attr("data-script-btn-omt-index")
                 var wScriptItem = $(this).attr("data-script-btn-omt-item")
                 var wScriptCodigo = $(this).attr("data-script-btn-omt")
-                debugger
+                
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
                 var wValorInteracao = ""
                 switch (parseInt(wInteracaoHtm.attr("data-interacao-tp"))) {
@@ -384,7 +384,7 @@ var _ccSyscareScript = function () {
                     default:
                         break
                 }
-                debugger
+                
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
@@ -392,8 +392,10 @@ var _ccSyscareScript = function () {
                 }                
                 if(wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 console.log("TEM QUE MONTAR O VETOR BRO", wVetor);
-                _ccSyscare2.cria(parseInt(++wIdxScriptItem))
-            })
+                /** REMOVER SE DER MERDA NO DIRECIONA */
+                //await _ccSyscare2.direciona(wScriptCodigo, wScriptItem)
+                // _ccSyscare2.cria(parseInt(++wIdxScriptItem))
+            })            
         },
 
         clickFinalizar: async function () {
@@ -418,7 +420,7 @@ var _ccSyscareScript = function () {
                         break
                     
                     case 11: // CHECKBOX
-                        debugger
+                        
                         var wValorInteracao = {};
                         var wValorChecado = $("[id='container-inputs'] [data-interacao-tp='11']")
                         wValorChecado.each(function (index, element) {
@@ -471,6 +473,7 @@ var _ccSyscareScript = function () {
         _ccSyscare2.listen.clickFinalizar()
 
         var wScriptItem = regulacaoScript[pItem]
+        console.log(wScriptItem);
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
 
 
@@ -501,7 +504,7 @@ var _ccSyscareScript = function () {
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
         if (wScriptRegulacao && !pBoLimpa) {
             var wInteracaoValor = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]["anResposta"]
-            debugger
+            
             var wObservacaoValor = wScriptRegulacao["anOBS"]
             /** SE JÁ TIVER VALOR SALVO */
             if (wInteracaoValor) {
@@ -527,7 +530,6 @@ var _ccSyscareScript = function () {
                         break;
                 }
             }
-            console.log('vamo ver se entra');
             if (wObservacaoValor) {
                 var wObservacaoHtm = $(`[data-script-omt='${wScriptItem.cnRegulacaoScript}'][data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}'][name='data-anObservacao']`);
                 wObservacaoHtm.val(wObservacaoValor);

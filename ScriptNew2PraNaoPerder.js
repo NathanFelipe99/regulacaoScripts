@@ -108,7 +108,7 @@ var _ccSyscareScript = function () {
                 obj: '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=" + wColunas + "&orderby=" + wOrderBy + "&where=" + wWhere + pScript), +1, 10, 0, 0, 1)}'
             }`
             wJsonScriptRegulacao["" + pScript + ""] = (wJsonScriptRegulacao["" + pScript + ""]) ? (wJsonScriptRegulacao["" + pScript + ""]) : {}
-            // console.log("É consulta, faz ajax filhao");
+            console.log("É consulta, faz ajax filhao");
             var wAjax = await _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsnItens)
             return $.when(wAjax).then(
                 async function (jsonScriptItem) {
@@ -345,6 +345,7 @@ var _ccSyscareScript = function () {
         clickScript: async function () {
             $(document).off(cc.evento.click, "[data-btn-script='true']")
             $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
+                console.log(wMItensCriados);
                 await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
             })
         },
@@ -353,18 +354,15 @@ var _ccSyscareScript = function () {
             $(document).off(cc.evento.click, "[data-script-btn-anterior='true']")
             $(document).on(cc.evento.click, "[data-script-btn-anterior='true']", async function () {
                 _ccSyscare2.tempo()
-                // var wScriptCodigo = $(this).attr("data-script-btn-omt")
-                console.log("wMItensCriados -->", wMItensCriados)
                 try {
-                    console.log("wMItensCriados ", wMItensCriados)
                     wVetor.pop()
 
                     var wUltimoCodigo = wMItensCriados[wMItensCriados.length - 1][0] // CODIGO
                     var wUltimoCodigoItem = wMItensCriados[wMItensCriados.length - 1][1] // ITEM
-                    pObjPesquisa = wUltimoCodigoItem
+                    wObjPesquisa = wUltimoCodigoItem
                     wPos = null
                     for (wIdx = 0; wIdx < regulacaoScript[wUltimoCodigo].length; wIdx++) {
-                        if (pObjPesquisa == regulacaoScript[wUltimoCodigo][wIdx].csRegulacaoScriptItem) {
+                        if (wObjPesquisa == regulacaoScript[wUltimoCodigo][wIdx].csRegulacaoScriptItem) {
                             wPos = wIdx;
                             break;
                         }
@@ -422,7 +420,6 @@ var _ccSyscareScript = function () {
                 }
 
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao) 
-                console.log("ENTROU E SAIU", wValorInteracao)
                 if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 console.log("TEM QUE MONTAR O VETOR BRO", wVetor);
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
@@ -510,20 +507,20 @@ var _ccSyscareScript = function () {
     }
 
     this.cria = async function (pScript, pItem, pBoDesc, pBoLimpa) {
-        // console.log(pScript, pItem);
         _ccSyscare2.listen.clickProximo()
         _ccSyscare2.listen.clickAnterior()
         _ccSyscare2.listen.clickFinalizar()
         wScriptCodigoRegulacao = pScript
         
         var wScriptItem = regulacaoScript[pScript][pItem]
+        var wDepoisDesse = regulacaoScript[pScript][pItem + 1]
+        console.log("ESSE MAIS UM", wDepoisDesse.boScriptFim);
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
-       console.log("ITEM DO SCRIPT ", wScriptItem);
         if (wScriptItem.anInteracaoCondicional) {
-            console.log("vai entrar?");
             var wClausula = await _ccSyscare2.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
             if (!eval(wClausula)) {
-                if (regulacaoScript.length == wScriptItem + 1) {
+                console.log(regulacaoScript.length);
+                if (regulacaoScript.length == wScriptItem.csRegulacaoScriptItem + 1) {
                     $("[name='data-buttons-script']").html('<div><button type="button"  onclick="alert(\'Fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
                     return
                 } else {

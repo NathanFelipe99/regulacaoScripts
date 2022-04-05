@@ -68,9 +68,7 @@ var _ccSyscareScript = function () {
     }
 
     this.valida = async function (pInteracao) {
-        debugger
-        // pInteracao = _cc.string.valor(pInteracao)
-        console.log("pInteracao ", pInteracao);
+        
         if (pInteracao == "" || (typeof (pInteracao) == 'object' && Object.getOwnPropertyNames(pInteracao).length == 0)) {
             alertify.set('notifier', 'position', 'top-right')
             alertify.error("<p class='text-center' style='color:white;font-size:16px;'>Resposta da pergunta é requerida!</p>", 20, alertify.get('notifier', 'position'))
@@ -127,8 +125,7 @@ var _ccSyscareScript = function () {
                         `
                     $("[name='fme-scripts']").html(wHtml)
 
-                    regulacaoScript[pScript] = wData;
-                    //(!wScriptItem) ? _ccSyscare1.cria(0) : pBoScriptAnterior ? _ccSyscare1.cria(wDirecionaAnt) : _ccSyscare1.cria('', '', wScriptItem - 1)                    
+                    regulacaoScript[pScript] = wData;                    
                     wScriptItem ? _ccSyscare2.cria(pScript, wScriptItem) : _ccSyscare2.cria(pScript, 0)
                 })
         }
@@ -373,8 +370,6 @@ var _ccSyscareScript = function () {
                         }
                     }
                     console.log("Achei o cara q vc quer criar na pos -- > ", wPos);
-                    // console.log("MAN CRIA ESSE SCRIPT ", wUltimoCodigo);
-                    // console.log("COM ESSE ITEM", wMItensCriados.length - 1);
                     // _ccSyscare2.cria(wUltimoCodigo, wMItensCriados.length - 1, "desc") // -> RICHARD
                     wMItensCriados.pop()
                     await _ccSyscare2.cria(wUltimoCodigo, wPos, "desc")
@@ -421,7 +416,6 @@ var _ccSyscareScript = function () {
                 }
                 
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
-                    console.log("QUANDO BATE");
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
                     }
@@ -440,9 +434,9 @@ var _ccSyscareScript = function () {
                         await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
                     }
                 } else {
+                    if (console.log(regulacaoScript[wScriptCodigoRegulacao][wIdxScriptItem].boScriptFim == 1)) console.log(regulacaoScript[wScriptCodigoRegulacao][wIdxScriptItem]); 
                     await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
-                }
-                //wRetornoDireciona == true ? await _ccSyscare2.busca.buscaRegulacaoScriptItens(wDirecionamentoCodigo, wDirecionamentoIndex) : await _ccSyscare2.cria(parseInt(++wIdxScriptItem))
+                }                
             })
         },
 
@@ -480,7 +474,7 @@ var _ccSyscareScript = function () {
                     default:
                         break
                 }
-                debugger
+                
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
@@ -503,6 +497,7 @@ var _ccSyscareScript = function () {
                 console.log("VETOR", wVetor);
                 await _ccSyscare2.limpaInputs()
                 wVetor = []
+                wMItensCriados = []
                 wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
                 _ccSyscare2.cria(wScriptCodigoRegulacao, 0, null, "limpa")
             })
@@ -515,6 +510,7 @@ var _ccSyscareScript = function () {
     }
 
     this.cria = async function (pScript, pItem, pBoDesc, pBoLimpa) {
+        // console.log(pScript, pItem);
         _ccSyscare2.listen.clickProximo()
         _ccSyscare2.listen.clickAnterior()
         _ccSyscare2.listen.clickFinalizar()
@@ -522,14 +518,13 @@ var _ccSyscareScript = function () {
         
         var wScriptItem = regulacaoScript[pScript][pItem]
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
-
-        console.log("ScriptItem ", wScriptItem);
+       console.log("ITEM DO SCRIPT ", wScriptItem);
         if (wScriptItem.anInteracaoCondicional) {
             console.log("vai entrar?");
             var wClausula = await _ccSyscare2.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
             if (!eval(wClausula)) {
                 if (regulacaoScript.length == wScriptItem + 1) {
-                    $("[name='data-buttons-script']").html('<div ><button type="button"  onclick="alert(\'Fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
+                    $("[name='data-buttons-script']").html('<div><button type="button"  onclick="alert(\'Fim\')" class="cc-btn btn btn-block  cc-bg-verde cc-text-branco cc-bg-preto cc-text-branco m-3 ">FINALIZAR</button></div>')
                     return
                 } else {
                     /* REMOVE RESPOSTA SALVA */
@@ -547,7 +542,7 @@ var _ccSyscareScript = function () {
         /** MONTA BOTÕES */
         await _ccSyscare2.monta.htmlButtons(pItem)
         await _ccSyscare2.tempo()
-        debugger
+        
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
         if (wScriptRegulacao && !pBoLimpa) {
             var wInteracaoValor = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]["anResposta"]
@@ -565,7 +560,7 @@ var _ccSyscareScript = function () {
                         break;
 
                     case '11':
-                        debugger
+                        
                         var wInteracaoCheckbox = JSON.parse(wInteracaoValor)
                         var wMCheckbox = Object.getOwnPropertyNames(wInteracaoCheckbox);
                         wMCheckbox.forEach(element => {

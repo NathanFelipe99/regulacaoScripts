@@ -298,6 +298,7 @@ var _ccSyscareScript = function () {
 
         htmlButtons: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
+            debugger
             var wHtmlButtons = (pItem == 0) ? await _ccSyscare2.monta.buttonProximo(pItem) : (regulacaoScript[wScriptCodigoRegulacao][pItem].boScriptFim == 1) ? await _ccSyscare2.monta.buttonAnterior(pItem) : await _ccSyscare2.monta.buttonAnterior(pItem) + await _ccSyscare2.monta.buttonProximo(pItem)
             $("[name='data-buttons-script']").html(`
                 <div class="cc-col w-100" style="background-color:white">
@@ -370,7 +371,6 @@ var _ccSyscareScript = function () {
                             break;
                         }
                     }
-                    // console.log("Achei o cara q vc quer criar na pos -- > ", wPos);
                     // _ccSyscare2.cria(wUltimoCodigo, wMItensCriados.length - 1, "desc") // -> RICHARD
                     wMItensCriados.pop()
                     await _ccSyscare2.cria(wUltimoCodigo, wPos, "desc")
@@ -424,7 +424,7 @@ var _ccSyscareScript = function () {
 
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
                 if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
-                // console.log("TEM QUE MONTAR O VETOR BRO", wVetor);
+                console.log("TEM QUE MONTAR O VETOR BRO", wVetor);
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
                 if (wDirecionamentoCondicional != "") {
                     var wRetornoDireciona = await _ccSyscare2.direciona(wIdxScriptItem, wValorInteracao)
@@ -513,10 +513,10 @@ var _ccSyscareScript = function () {
         _ccSyscare2.listen.clickAnterior()
         _ccSyscare2.listen.clickFinalizar()
         wScriptCodigoRegulacao = pScript
-
-        debugger
+        
         var wScriptItem = regulacaoScript[pScript][pItem]
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
+        debugger
         if (wScriptItem.anInteracaoCondicional) {
             var wClausula = await _ccSyscare2.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
             if (!eval(wClausula)) {

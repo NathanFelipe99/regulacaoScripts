@@ -1,3 +1,4 @@
+/** REMOVER SE DER MERDA NO DIRECIONA */
 var _ccSyscareScript = function () {
     var wJsonScriptRegulacao = {}
     var wJson = {}
@@ -68,7 +69,7 @@ var _ccSyscareScript = function () {
     }
 
     this.valida = async function (pInteracao) {
-        
+
         if (pInteracao == "" || (typeof (pInteracao) == 'object' && Object.getOwnPropertyNames(pInteracao).length == 0)) {
             alertify.set('notifier', 'position', 'top-right')
             alertify.error("<p class='text-center' style='color:white;font-size:16px;'>Resposta da pergunta é requerida!</p>", 20, alertify.get('notifier', 'position'))
@@ -125,7 +126,7 @@ var _ccSyscareScript = function () {
                         `
                     $("[name='fme-scripts']").html(wHtml)
 
-                    regulacaoScript[pScript] = wData;                    
+                    regulacaoScript[pScript] = wData;
                     wScriptItem ? _ccSyscare2.cria(pScript, wScriptItem) : _ccSyscare2.cria(pScript, 0)
                 })
         }
@@ -163,6 +164,13 @@ var _ccSyscareScript = function () {
                     <div name="mnu-scripts" style="background-color:white">${wHtml}</div>
                     <hr style="background-color:white">
                     <div name="fme-scripts" id="fme-scripts" style="background-color:white"></div>
+                    <div name="fme-finalizar" id="fme-finalizar" style="background-color:white">
+                        <div class="cc-btn-col cc-col cc-col-4 mr-3" style="float: right; ">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                                FINALIZAR
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `)
         },
@@ -300,12 +308,7 @@ var _ccSyscareScript = function () {
                     </div>
                     <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%)" id="data-buttons-principal">
                         ${wHtmlButtons}
-                    </div>
-                    <div class="cc-btn-col cc-col cc-col-4 mr-3" style="float: right; ">
-                        <button data-script-btn-finalizar='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
-                            FINALIZAR
-                        </button>
-                    </div>
+                    </div>                    
                 </div>
             `)
         },
@@ -406,20 +409,20 @@ var _ccSyscareScript = function () {
                         wValorChecado.each(function (index, element) {
                             let wHtmItemScript = $(this);
                             wHtmItemScript.is(':checked') ? wValorInteracao["" + wHtmItemScript.attr("id") + ""] = 1 : false
-                        });                                                
+                        });
                         break
 
                     default:
                         break
                 }
-                
+
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
                     }
                 }
 
-                if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao) 
+                if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
                 if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 // console.log("TEM QUE MONTAR O VETOR BRO", wVetor);
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
@@ -430,9 +433,9 @@ var _ccSyscareScript = function () {
                     } else {
                         await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
                     }
-                } else {                    
+                } else {
                     await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
-                }                
+                }
             })
         },
 
@@ -443,8 +446,8 @@ var _ccSyscareScript = function () {
 
             $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                var wScriptItem = $(this).attr("data-script-btn-omt-item")
-                var wScriptCodigo = $(this).attr("data-script-btn-omt")
+                var wScriptCodigo = $(`[name='data-anResposta']`).attr("data-script-omt")
+                var wScriptItem = $(`[name='data-anResposta']`).attr("data-script-omt-item")
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][name='data-anResposta']`)
                 var wValorInteracao = ""
                 switch (parseInt(wInteracaoHtm.attr("data-interacao-tp"))) {
@@ -470,7 +473,7 @@ var _ccSyscareScript = function () {
                     default:
                         break
                 }
-                
+
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
@@ -510,16 +513,16 @@ var _ccSyscareScript = function () {
         _ccSyscare2.listen.clickAnterior()
         _ccSyscare2.listen.clickFinalizar()
         wScriptCodigoRegulacao = pScript
-        
+
         debugger
         var wScriptItem = regulacaoScript[pScript][pItem]
-        var wDepoisDesse = regulacaoScript[pScript][pItem + 1]
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
         if (wScriptItem.anInteracaoCondicional) {
             var wClausula = await _ccSyscare2.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
-            if (!eval(wClausula)) {                
-                if (regulacaoScript[pScript].length == wScriptItem.csRegulacaoScriptItem + 1) {                    
-                    $("[name='fme-scripts']").html('<div><button type="button" align="center" onclick="alert(\'Fim !\')" class="cc-btn btn btn-block cc-col-4 cc-bg-verde cc-text-branco ">FINALIZAR</button></div>')
+            if (!eval(wClausula)) {
+                if (regulacaoScript[pScript].length == wScriptItem.csRegulacaoScriptItem + 1) {
+                    // $("[name='fme-scripts']").html('<div><button type="button" onclick="alert(\'Fim !\')" class="cc-btn btn btn-block cc-col-4 cc-bg-verde cc-text-branco ">FINALIZAR</button></div>')
+                    _cc.msg('Acabou já, burro !', "warning2")
                     return
                 } else {
                     /* REMOVE RESPOSTA SALVA */
@@ -537,7 +540,7 @@ var _ccSyscareScript = function () {
         /** MONTA BOTÕES */
         await _ccSyscare2.monta.htmlButtons(pItem)
         await _ccSyscare2.tempo()
-        
+
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""];
         if (wScriptRegulacao && !pBoLimpa) {
             var wInteracaoValor = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]["anResposta"]
@@ -555,7 +558,7 @@ var _ccSyscareScript = function () {
                         break;
 
                     case '11':
-                        
+
                         var wInteracaoCheckbox = JSON.parse(wInteracaoValor)
                         var wMCheckbox = Object.getOwnPropertyNames(wInteracaoCheckbox);
                         wMCheckbox.forEach(element => {

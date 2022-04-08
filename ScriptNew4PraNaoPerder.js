@@ -1,15 +1,26 @@
 /** REMOVER SE DER MERDA NO DIRECIONA */
 var _ccSyscareScript = function () {
+    var serverdate = new Date(moment().format("HH:mm:ss"))
     var wJsonScriptRegulacao = {}
     var wJson = {}
     var wVetor = []
     var wStartTimeSec = ""
     var wEndTimeSec = "" 
     var wMItensCriados = []
-
     window.regulacaoScript = {}
     /* RICHARD */
     var wScriptCodigoRegulacao = 0
+
+    // this.clockStart = async function () {
+    //     function padlength(what) {
+    //         var output = (what.toString().length == 1) ? "0" + what : what;
+    //         return output;
+    //     }
+
+    //     serverdate.setSeconds(serverdate.getSeconds() + 1)
+    //     var wTimeString = padlength(serverdate.getHours()) + ":" + padlength(serverdate.getMinutes()) + ":" + padlength(serverdate.getSeconds());
+    //     console.log("COMEÇOU: ", wTimeString);
+    // }
 
     this.limpaInputs = async function () {
         for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
@@ -106,10 +117,10 @@ var _ccSyscareScript = function () {
                             </div>
                         </div>
                         `
-                    $("[name='fme-scripts']").html(wHtml)
-
+                    $("[name='fme-scripts']").html(wHtml)                
                     regulacaoScript[pScript] = wData;
-                    wScriptItem ? _ccSyscare2.cria(pScript, wScriptItem) : _ccSyscare2.cria(pScript, 0)
+                    wScriptItem ? await _ccSyscare2.cria(pScript, wScriptItem) : await _ccSyscare2.cria(pScript, 0)
+                    // _ccSyscare2.clockStart()
                 })
         }
     }
@@ -152,6 +163,8 @@ var _ccSyscareScript = function () {
                                 FINALIZAR
                             </button>
                         </div>
+                    </div>
+                    <div name="script-clock" style="background-color:white">
                     </div>
                 </div>
             `)
@@ -343,7 +356,7 @@ var _ccSyscareScript = function () {
                     console.log("AAAAAAA CAIU AQUI");            
                     // wVetor.pop()
                     var wUltimoCodigo = wMItensCriados[wMItensCriados.length - 1][0] // CODIGO
-                    var wUltimoCodigoItem = wMItensCriados[wMItensCriados.length - 1][1] // ITEM
+                    var wUltimoCodigoItem = wMItensCriados[wMItensCriados.length - 1][1] // ITEM                    
                     wObjPesquisa = wUltimoCodigoItem
                     wPos = null
                     for (wIdx = 0; wIdx < regulacaoScript[wUltimoCodigo].length; wIdx++) {
@@ -353,7 +366,7 @@ var _ccSyscareScript = function () {
                         }
                     }
                     // _ccSyscare2.cria(wUltimoCodigo, wMItensCriados.length - 1, "desc") // -> RICHARD
-                    wMItensCriados.pop()
+                    //wMItensCriados.pop()
                     await _ccSyscare2.cria(wUltimoCodigo, wPos, "desc")
 
                 } catch (error) {
@@ -409,10 +422,8 @@ var _ccSyscareScript = function () {
                 if (wVetor.length) {
                     var wUltimoCodigo = wVetor[wVetor.length - 1].cnRegulacaoScript                    
                     var wUltimoCodigoItem = wVetor[wVetor.length - 1].csRegulacaoScriptItem
-                    console.log("ÚLTIMO CARA?", wUltimoCodigo, wUltimoCodigoItem);
+                    
                     var wItemJaExiste = wVetor.find(script => script.cnRegulacaoScript == wUltimoCodigo) && wVetor.find(item => item.csRegulacaoScriptItem == wUltimoCodigoItem)
-                    console.log("QUEM É ESSE CARA??", wItemJaExiste);
-                    console.log("QUEM JÁ FOI CRIADO???" , wMItensCriados);
                     if (wItemJaExiste && (wItemJaExiste.csRegulacaoScriptItem == wScriptItem)) {
                         // console.log("INTERAÇÃO DA TELA --> ", wValorInteracao, " | INTERAÇÃO DO VETOR --> ", wItemJaExiste.anResposta);
                         // console.log("INTERAÇÃO COMPARA --> ", wValorInteracao == ("" || wItemJaExiste.anResposta));

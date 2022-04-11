@@ -443,13 +443,12 @@ var _ccSyscareScript = function () {
 
             let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov"
             let wSaveMthd = "post"
-
             $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']")
-            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
-                debugger
+            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {                
                 var wScriptCodigo = $(`[name='data-anResposta']`).attr("data-script-omt")
                 var wScriptItem = $(`[name='data-anResposta']`).attr("data-script-omt-item")
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][name='data-anResposta']`)
+                var wValorObservacao = $("[name='data-anObservacao']").val()
                 var wValorInteracao = ""
                 switch (parseInt(wInteracaoHtm.attr("data-interacao-tp"))) {
                     case 1: // TEXTO
@@ -490,8 +489,9 @@ var _ccSyscareScript = function () {
                 // var wUltimoCodigo = wJsonSalvo.cnRegulacaoScript
                 // var wUltimoCodigoItem = wJsonSalvo.csRegulacaoScriptItem
 
-                var wCriouOCodigo = wVetor.find(script => script.cnRegulacaoScript == wUltimoCodigo) && wVetor.find(item => item.csRegulacaoScriptItem == wUltimoCodigoItem)
-                if (wValorInteracao && !wCriouOCodigo) await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
+                var wCodigoCriado = wVetor.findIndex((script => script.cnRegulacaoScript == wUltimoCodigo) && (item => item.csRegulacaoScriptItem == wUltimoCodigoItem && item.boSubstituido == "0"))            
+                if (wValorInteracao != "" && (wVetor[wCodigoCriado].anResposta != wValorInteracao || wVetor[wCodigoCriado].anOBS != wValorObservacao)) await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao) 
+                if (wCodigoCriado != -1) wVetor[wCodigoCriado].boSubstituido = "1"
                 for (let wIdx = 0; wIdx < wVetor.length; wIdx++) {
                     await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
                         console.log("DATA RESULT: ", result)

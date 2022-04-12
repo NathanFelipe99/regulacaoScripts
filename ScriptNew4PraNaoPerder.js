@@ -7,6 +7,9 @@ var _ccSyscareScript = function () {
     var wMItensCriados = []
     window.regulacaoScript = {}
     var wJsonSalvo = {}
+    var wContadorAtendimento, wContadorPergunta;
+    var wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
+    var wPerguntaTimer = moment("00:00:00", "HH:mm:ss");
     /* RICHARD */
     var wScriptCodigoRegulacao = 0
 
@@ -15,6 +18,28 @@ var _ccSyscareScript = function () {
             $('[id="fme-scripts"]').find('input').val('')
             $('[id="fme-scripts"] [type="radio"]').prop('checked', false)
             $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
+            $('[id="fme-scripts"] [type="text"]').val('')
+            $('[id="fme-scripts"]').empty()
+        }
+    }
+
+    this.timer = {
+        iniciaAtendimento: async function () {
+            var wDomTime = $("[id='fme-timer-scripts']")
+            wContadorAtendimento = setInterval(function () {
+                wAtendimentoTimer = wAtendimentoTimer.add(1, 'seconds')
+                // console.log(wAtendimentoTimer.format("HH:mm:ss"));
+                wDomTime.html("TEMPO DO ATENDIMENTO: " + wAtendimentoTimer.format("HH:mm:ss"))
+            }, 1000);
+        },
+        
+        iniciaPergunta: async function () {
+            var wDomTime = $("[id='fme-scripts-pergunta-timer']")
+            wContadorPergunta = setInterval(function () {
+                wPerguntaTimer = wPerguntaTimer.add(1, 'seconds')
+                // console.log(wPerguntaTimer.format("HH:mm:ss"));
+                wDomTime.html("TEMPO DA PERGUNTA: " + wPerguntaTimer.format("HH:mm:ss"))
+            }, 1000);
         }
     }
 
@@ -116,7 +141,7 @@ var _ccSyscareScript = function () {
     this.monta = {
         htmlCabecalho: async function (pObjReferencia) {
             var wData = await _ccSyscare2.busca.buscaRegulacaoScript()
-            var wHtml = ""
+            var wHtml = ""            
             for (var wIdx = 0; wIdx < wData.length; wIdx++) {
                 const wScript = wData[wIdx]
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco upper-case" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
@@ -143,19 +168,22 @@ var _ccSyscareScript = function () {
                         </div>                                                                   
                     </div>                    
                     <div name="mnu-scripts" style="background-color:white">${wHtml}</div>
-                    <hr style="background-color:white">
-                    <div name="fme-scripts" id="fme-scripts" style="background-color:white"></div>
+                    <hr style="background-color:white">                    
+                    <div name="fme-scripts-pergunta-timer" id="fme-scripts-pergunta-timer" style="background-color:white;font-size:12px;text-align: center;font-weight: bold"></div>                    
+                    <div name="fme-scripts" id="fme-scripts" style="background-color:white">                    
+                    </div>
+                    <div name="fme-timer-scripts" id="fme-timer-scripts" style="font-size:16px;text-align: center;font-weight: bold;" class="my-3"></div>
                     <div name="fme-finalizar" id="fme-finalizar" style="background-color:white">
-                        <div class="cc-btn-col cc-col cc-col-4 mr-3" style="float: right; ">
-                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco m-3" >
+                        <div class="cc-btn-col cc-col m-3 cc-col-6"  style="float: right;">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco m-3 cc-bg-preto cc-text-branco" style="width: 28rem;font-weight: bold;">
                                 FINALIZAR
                             </button>
                         </div>
                     </div>
-                    <div name="script-clock" style="background-color:white">
                     </div>
                 </div>
             `)
+            await _ccSyscare2.timer.iniciaAtendimento()
         },
 
         htmlInput: async function (pScriptItem) {
@@ -218,7 +246,6 @@ var _ccSyscareScript = function () {
                                     </div>
                                 </div>  
                             `
-
                         }
                     }
                     break
@@ -321,12 +348,11 @@ var _ccSyscareScript = function () {
         }
     }
 
-    this.listen = {
+    this.listen = {    
         clickScript: async function () {
             $(document).off(cc.evento.click, "[data-btn-script='true']")
             $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-                console.log(wMItensCriados);
-                await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
+                await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))                
             })
         },
 
@@ -421,7 +447,8 @@ var _ccSyscareScript = function () {
 
                 console.log("ADICIONOU AO VETOR", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
-
+                clearInterval(wContadorPergunta)
+                wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
                 if (wDirecionamentoCondicional != "") {
                     var wRetornoDireciona = await _ccSyscare2.direciona(wIdxScriptItem, wValorInteracao)
                     if (wRetornoDireciona == true) {
@@ -468,8 +495,7 @@ var _ccSyscareScript = function () {
 
                     default:
                         break
-                }
-                debugger
+                }                
                 // VERIIFICA SE A INTERAÇÃO É REQUERIDA E NÃO É VAZIA (STRING OU OBJECT)
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
@@ -508,11 +534,14 @@ var _ccSyscareScript = function () {
                     });
                 }
                 console.log("VETOR", wVetor)
+                clearInterval(wContadorAtendimento)
+                debugger
+                console.log("AQUI", wAtendimentoTimer); 
                 await _ccSyscare2.limpaInputs()
                 wVetor = []
                 wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
                 wJsonSalvo = {}
-                wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")
+                wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")                
                 wMItensCriados = []
             })
         }
@@ -552,11 +581,13 @@ var _ccSyscareScript = function () {
         var wHtmScriptItem = await _ccSyscare2.monta.htmlInput(pItem)
         /** Append HTML */
         $("[name='data-conteudo-script']").html(wHtmScriptItem)
-
+        clearInterval(wContadorPergunta)
+        wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
         wStartTimeSec = moment().format("DD/MM/YYYY HH:mm:ss")
 
         /** MONTA BOTÕES */
         await _ccSyscare2.monta.htmlButtons(pItem)
+        _ccSyscare2.timer.iniciaPergunta()
 
         var wScriptRegulacao = wJsonScriptRegulacao["" + wScriptItem.cnRegulacaoScript + ""]["" + wScriptItem.csRegulacaoScriptItem + ""]
         if (wScriptRegulacao && !pBoLimpa) {

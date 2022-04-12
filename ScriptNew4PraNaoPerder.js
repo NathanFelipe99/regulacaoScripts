@@ -5,7 +5,7 @@ var _ccSyscareScript = function () {
     var wJson = {}
     var wVetor = []
     var wStartTimeSec = ""
-    var wEndTimeSec = "" 
+    var wEndTimeSec = ""
     var wMItensCriados = []
     window.regulacaoScript = {}
     /* RICHARD */
@@ -106,7 +106,7 @@ var _ccSyscareScript = function () {
                             </div>
                         </div>
                         `
-                    $("[name='fme-scripts']").html(wHtml)                
+                    $("[name='fme-scripts']").html(wHtml)
                     regulacaoScript[pScript] = wData;
                     wScriptItem ? await _ccSyscare2.cria(pScript, wScriptItem) : await _ccSyscare2.cria(pScript, 0)
                 })
@@ -311,7 +311,7 @@ var _ccSyscareScript = function () {
                 anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
                 dtPergunta: "" + wStartTimeSec + "",
                 anRespondedor: $("[name='anRespondedor']").val(),
-                dtResposta: "" + wEndTimeSec  + "",
+                dtResposta: "" + wEndTimeSec + "",
                 anResposta: _cc.string.valor(wValorInteracao),
                 anOBS: wValorObservacao,
                 boSubstituido: "" + 0 + ""
@@ -337,9 +337,7 @@ var _ccSyscareScript = function () {
                     // wVetor.pop()
                     console.log("ITENS CRIADOS ", wMItensCriados);
                     var wUltimoCodigo = wMItensCriados[wMItensCriados.length - 1][0] // CODIGO
-                    console.log("ULTIMO CODIGO: ", wUltimoCodigo);
                     var wUltimoCodigoItem = wMItensCriados[wMItensCriados.length - 1][1] // ITEM                    
-                    console.log("ULTIMO ITEM: ", wUltimoCodigoItem);
                     wObjPesquisa = wUltimoCodigoItem
                     wPos = null
                     for (wIdx = 0; wIdx < regulacaoScript[wUltimoCodigo].length; wIdx++) {
@@ -388,41 +386,39 @@ var _ccSyscareScript = function () {
                             let wHtmItemScript = $(this)
                             wHtmItemScript.is(':checked') ? wValorInteracao["" + wHtmItemScript.attr("id") + ""] = 1 : false
                         })
+                        Object.getOwnPropertyNames(wValorInteracao).length > 0 ? wValorInteracao : wValorInteracao = ""
                         break
 
                     default:
                         break
-                }                               
+                }
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
                     }
-                }                
-                // SE FOR OBJETO, FAZ O STRINGIFY APÓS A VALIDAÇÃO DA INTERAÇÃO
+                }
+                // SE FOR OBJETO, FAZ O STRINGIFY APÓS A VALIDAÇÃO DA INTERAÇÃO                
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
 
                 var wJsonSalvo = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]
 
                 /** VERIFICA SE O ITEM JÁ FOI PREENCHIDO E FAZ A TRATATIVA DEVIDA */
-                if (wJsonSalvo) {                    
-                    debugger
+                if (wJsonSalvo) {
                     console.log("wJsonSalvo", wJsonSalvo);
                     var wItemJaExiste = (wJsonSalvo.cnRegulacaoScript == wScriptCodigo) && (wJsonSalvo.csRegulacaoScriptItem == wScriptItem) ? true : false
-                    if (wItemJaExiste) {                        
+                    if (wItemJaExiste) {
                         if ((wValorInteracao !== "") && (wValorInteracao !== wJsonSalvo.anResposta || wValorObservacao !== wJsonSalvo.anOBS)) {
                             var wSubstituido = wVetor.findIndex((script => script.cnRegulacaoScript == wScriptCodigo) && (item => (item.csRegulacaoScriptItem == wScriptItem) && (item.boSubstituido == "0")))
-                            console.log("AAAAAAAAAAAAAAAAAAA", wSubstituido);
                             wVetor[wSubstituido].boSubstituido = "1"
                             await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
-                        }                        
+                        }
                     } else {
                         if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                     }
                 } else {
                     if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 }
-                
-                // if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
+
                 console.log("TEM QUE MONTAR O VETOR BRO", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
 
@@ -444,7 +440,7 @@ var _ccSyscareScript = function () {
             let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov"
             let wSaveMthd = "post"
             $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']")
-            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {                
+            $(document).on(cc.evento.click, "[data-script-btn-finalizar='true']", async function () {
                 var wScriptCodigo = $(`[name='data-anResposta']`).attr("data-script-omt")
                 var wScriptItem = $(`[name='data-anResposta']`).attr("data-script-omt-item")
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}'][name='data-anResposta']`)
@@ -466,21 +462,21 @@ var _ccSyscareScript = function () {
                         wValorChecado.each(function (index, element) {
                             let wHtmItemScript = $(this);
                             wHtmItemScript.is(':checked') ? wValorInteracao["" + wHtmItemScript.attr("id") + ""] = 1 : false
-                        })                        
+                        })
                         break
 
                     default:
                         break
                 }
-                debugger
                 // VERIIFICA SE A INTERAÇÃO É REQUERIDA E NÃO É VAZIA (STRING OU OBJECT)
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
                     }
                 }
+                console.log("AAAAAA QUE DROGA", wValorInteracao);
                 // VERIFICA SE A INTERAÇÃO É OBJETO SOMENTE APÓS PASSAR PELA VALIDAÇÃO --> NATHAN 
-                if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)     
+                if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
 
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
 
@@ -489,9 +485,15 @@ var _ccSyscareScript = function () {
                 // var wUltimoCodigo = wJsonSalvo.cnRegulacaoScript
                 // var wUltimoCodigoItem = wJsonSalvo.csRegulacaoScriptItem
 
-                var wCodigoCriado = wVetor.findIndex((script => script.cnRegulacaoScript == wUltimoCodigo) && (item => item.csRegulacaoScriptItem == wUltimoCodigoItem && item.boSubstituido == "0"))            
-                if (wValorInteracao != "" && (wVetor[wCodigoCriado].anResposta != wValorInteracao || wVetor[wCodigoCriado].anOBS != wValorObservacao)) await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao) 
-                if (wCodigoCriado != -1) wVetor[wCodigoCriado].boSubstituido = "1"
+                var wCodigoCriado = wVetor.findIndex((script => script.cnRegulacaoScript == wUltimoCodigo) && (item => item.csRegulacaoScriptItem == wUltimoCodigoItem && item.boSubstituido == "0"))
+                if (wCodigoCriado != -1) {
+                    if (wValorInteracao != "" && (wVetor[wCodigoCriado].anResposta != wValorInteracao || wVetor[wCodigoCriado].anOBS != wValorObservacao)) {
+                        await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
+                        wVetor[wCodigoCriado].boSubstituido = "1"
+                    }
+                } else {
+                    await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
+                }
                 for (let wIdx = 0; wIdx < wVetor.length; wIdx++) {
                     await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
                         console.log("DATA RESULT: ", result)
@@ -550,7 +552,7 @@ var _ccSyscareScript = function () {
         $("[name='data-conteudo-script']").html(wHtmScriptItem)
 
         wStartTimeSec = moment().format("DD/MM/YYYY HH:mm:ss")
-        
+
         /** MONTA BOTÕES */
         await _ccSyscare2.monta.htmlButtons(pItem)
 

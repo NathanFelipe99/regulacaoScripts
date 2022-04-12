@@ -1,6 +1,4 @@
-/** REMOVER SE DER MERDA NO DIRECIONA */
 var _ccSyscareScript = function () {
-    var serverdate = new Date(moment().format("HH:mm:ss"))
     var wJsonScriptRegulacao = {}
     var wJson = {}
     var wVetor = []
@@ -8,6 +6,7 @@ var _ccSyscareScript = function () {
     var wEndTimeSec = ""
     var wMItensCriados = []
     window.regulacaoScript = {}
+    var wJsonSalvo = {}
     /* RICHARD */
     var wScriptCodigoRegulacao = 0
 
@@ -400,7 +399,7 @@ var _ccSyscareScript = function () {
                 // SE FOR OBJETO, FAZ O STRINGIFY APÓS A VALIDAÇÃO DA INTERAÇÃO                
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
 
-                var wJsonSalvo = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]
+                wJsonSalvo = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]
 
                 /** VERIFICA SE O ITEM JÁ FOI PREENCHIDO E FAZ A TRATATIVA DEVIDA */
                 if (wJsonSalvo) {
@@ -463,18 +462,19 @@ var _ccSyscareScript = function () {
                             let wHtmItemScript = $(this);
                             wHtmItemScript.is(':checked') ? wValorInteracao["" + wHtmItemScript.attr("id") + ""] = 1 : false
                         })
+                        Object.getOwnPropertyNames(wValorInteracao).length > 0 ? wValorInteracao : wValorInteracao = ""
                         break
 
                     default:
                         break
                 }
+                debugger
                 // VERIIFICA SE A INTERAÇÃO É REQUERIDA E NÃO É VAZIA (STRING OU OBJECT)
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
                     if (await _ccSyscare2.valida(wValorInteracao) == false) {
                         return
                     }
                 }
-                console.log("AAAAAA QUE DROGA", wValorInteracao);
                 // VERIFICA SE A INTERAÇÃO É OBJETO SOMENTE APÓS PASSAR PELA VALIDAÇÃO --> NATHAN 
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
 
@@ -486,13 +486,13 @@ var _ccSyscareScript = function () {
                 // var wUltimoCodigoItem = wJsonSalvo.csRegulacaoScriptItem
 
                 var wCodigoCriado = wVetor.findIndex((script => script.cnRegulacaoScript == wUltimoCodigo) && (item => item.csRegulacaoScriptItem == wUltimoCodigoItem && item.boSubstituido == "0"))
-                if (wCodigoCriado != -1) {
-                    if (wValorInteracao != "" && (wVetor[wCodigoCriado].anResposta != wValorInteracao || wVetor[wCodigoCriado].anOBS != wValorObservacao)) {
+                if (wCodigoCriado != -1 && wValorInteracao != "") {
+                    if (wVetor[wCodigoCriado].anResposta != wValorInteracao || wVetor[wCodigoCriado].anOBS != wValorObservacao) {
                         await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                         wVetor[wCodigoCriado].boSubstituido = "1"
                     }
                 } else {
-                    await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
+                    if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 }
                 for (let wIdx = 0; wIdx < wVetor.length; wIdx++) {
                     await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
@@ -510,6 +510,7 @@ var _ccSyscareScript = function () {
                 await _ccSyscare2.limpaInputs()
                 wVetor = []
                 wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
+                wJsonSalvo = {}
                 wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")
                 wMItensCriados = []
             })

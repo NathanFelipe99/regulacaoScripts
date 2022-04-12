@@ -91,6 +91,7 @@ var _ccSyscareScript = function () {
                 obj: '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=" + wColunas + "&orderby=" + wOrderBy + "&where=" + wWhere + pScript), +1, 10, 0, 0, 1)}'
             }`
             wJsonScriptRegulacao["" + pScript + ""] = (wJsonScriptRegulacao["" + pScript + ""]) ? (wJsonScriptRegulacao["" + pScript + ""]) : {}
+            console.log("É CONSULTA, FAÇA O AJAX FILHÃO");
             var wAjax = await _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsnItens)
             return $.when(wAjax).then(
                 async function (jsonScriptItem) {
@@ -418,7 +419,7 @@ var _ccSyscareScript = function () {
                     if (wValorInteracao != "") await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                 }
 
-                console.log("TEM QUE MONTAR O VETOR BRO", wVetor)
+                console.log("ADICIONOU AO VETOR", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
 
                 if (wDirecionamentoCondicional != "") {
@@ -496,7 +497,7 @@ var _ccSyscareScript = function () {
                 }
                 for (let wIdx = 0; wIdx < wVetor.length; wIdx++) {
                     await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
-                        console.log("DATA RESULT: ", result)
+                        // console.log("DATA RESULT: ", result)
                         if (result.cnRetorno != 0) {
                             _cc.msg("Erro ao salvar!", "danger")
                         } else {

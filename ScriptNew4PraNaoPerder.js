@@ -20,9 +20,15 @@ var _ccSyscareScript = function () {
             $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
             $('[id="fme-scripts"] [type="text"]').val('')            
         }
+        $('[id="fme-timer-scripts]').text('')
         $('[id="fme-scripts-pergunta-timer"]').text('')
-        $('[id="fme-timer-scripts"]').text('')
         $('[id="fme-scripts"]').empty()
+        wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
+        $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {            
+            await _ccSyscare2.listen.clickScript().then(function () {
+                _ccSyscare2.timer.iniciaAtendimento()
+            })
+        })
     }
 
     this.timer = {
@@ -397,7 +403,6 @@ var _ccSyscareScript = function () {
                 var wDirecionamentoIndex = regulacaoScriptItem.cnDirecionamentoScriptItem - 1
                 var wValorObservacao = $("[name='data-anObservacao']").val()
                 var wInteracaoHtm = $(`[data-script-omt='${wScriptCodigo}'][data-script-omt-item='${wScriptItem}']`)
-
                 var wValorInteracao = ""
 
                 switch (parseInt(wInteracaoHtm.attr("data-interacao-tp"))) {

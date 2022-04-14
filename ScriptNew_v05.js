@@ -131,8 +131,8 @@ var _ccSyscareScript = function () {
                     _cc.validaResultadoAjax(jsonScriptItem)
                     var wData = jsonScriptItem.data
                     wHtml = `
-                        <div class="">                               
-                            <div class="mx-4" name="data-conteudo-script">
+                        <div>                               
+                            <div class="mx-4 px-2" name="data-conteudo-script">
                             </div>
                             <div class="mx-4" name="data-buttons-script" >
                             </div>
@@ -169,13 +169,13 @@ var _ccSyscareScript = function () {
                     </div>
                     <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display: block;background-color:white">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" class="mx-3 mb-3" style="background-color:white;padding-right:1.5rem">
+                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 0 7px">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 INICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-reiniciar" hidden="true">
+                        <div class="cc-btn-col cc-col cc-col-4" id="container-btn-reiniciar" hidden="true">
                             <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 REINICIAR
                             </button>

@@ -132,9 +132,9 @@ var _ccSyscareScript = function () {
                     var wData = jsonScriptItem.data
                     wHtml = `
                         <div class="">                               
-                            <div class="p-1 mt-2" name="data-conteudo-script">
+                            <div class="mx-4" name="data-conteudo-script">
                             </div>
-                            <div class="p-1" name="data-buttons-script" >
+                            <div class="mx-4" name="data-buttons-script" >
                             </div>
                         </div>
                         `
@@ -169,19 +169,19 @@ var _ccSyscareScript = function () {
                     </div>
                     <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display: block;background-color:white">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" class="mx-3" style="background-color:white;">
-                        <div class="cc-btn-col cc-col cc-col-4" id="container-btn-iniciar">
-                            <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3 cc-bg-preto cc-text-branco" style="width: 20rem;font-weight: bold;">
+                    <div name="fme-buttons-control" id="fme-buttons-control" class="mx-3 mb-3" style="background-color:white;padding-right:1.5rem">
+                        <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
+                            <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 INICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4" id="container-btn-reiniciar" hidden="true">
-                            <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco m-3 cc-bg-preto cc-text-branco" style="width: 20rem;font-weight: bold;">
+                        <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-reiniciar" hidden="true">
+                            <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 REINICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4 mr-3" style="float: right" id="container-btn-finalizar">
-                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-brancocc-bg-preto cc-text-branco" style="width: 20rem;font-weight: bold;">
+                        <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right" id="container-btn-finalizar" hidden="true">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco cc-text-branco mt-3 ml-3" style="width: 20rem;font-weight: bold;">
                                 FINALIZAR
                             </button>
                         </div>       
@@ -194,6 +194,7 @@ var _ccSyscareScript = function () {
         htmlScripts: async function () {
             $('[id="container-btn-iniciar"]').attr('hidden', true)
             $('[id="container-btn-reiniciar"]').attr('hidden', false)
+            $('[id="container-btn-finalizar"]').attr('hidden', false)
             var wData = await _ccSyscare2.busca.buscaRegulacaoScript()
             var wHtml = ""
             for (var wIdx = 0; wIdx < wData.length; wIdx++) {
@@ -201,7 +202,7 @@ var _ccSyscareScript = function () {
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[id='mnu-dados-regulacao-itens']").html(`                    
-                    <div name="mnu-scripts" id="mnu-scripts" style="text-align:center">${wHtml}</div>
+                    <div name="mnu-scripts" id="mnu-scripts" style="display:flex;flex-direction:row;margin-left:1rem">${wHtml}</div>
                     <div name="fme-timer-scripts" id="fme-timer-scripts" style="font-size:16px;text-align: center;font-weight: bold;" class="my-3"></div>
                     <hr style="background-color:white">
                     <div name="fme-scripts" id="fme-scripts" style="background-color:white"></div>                                            
@@ -220,7 +221,7 @@ var _ccSyscareScript = function () {
             var wHtml = ""
             switch (wScriptItem.cnInteracaoTP) {
                 case 1: // TEXTOS
-                    wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="data-anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
+                    wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 0.75rem;border-radius: 5px;" name="data-anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>`;
                     wHtml += `
                         <div class="cc-inp cc-col cc-col-${wColspan}" style="background-color:white">
                             <div class="form-group position-relative">
@@ -266,7 +267,7 @@ var _ccSyscareScript = function () {
                                             <input data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' 
                                             data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' 
                                             class="form-check-input" type="radio" name="data-anResposta" id="flexRadioDefault2" value="${wMOptions[wIdx]}"/>
-                                            <label  class="form-check-label" for="data-anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
+                                            <label  class="form-check-label ml-2" for="data-anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
                                         </div>
                                     </div>
                                 </div>  
@@ -288,7 +289,7 @@ var _ccSyscareScript = function () {
                                             <input data-interacao-requerido='${wScriptItem.boRequerido}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' 
                                                 data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' 
                                                 class="form-check-input" type="checkbox" name="data-anResposta" id="${wMOptions[wIdx]}" />
-                                                <label  class="form-check-label" for="data-anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
+                                                <label  class="form-check-label ml-2" for="data-anResposta">${wRotinaCarga[wMOptions[wIdx]]}</label>
                                         </div>
                                     </div>
                                     `
@@ -306,7 +307,7 @@ var _ccSyscareScript = function () {
         buttonAnterior: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
             var wHtmlAnterior = `<div class="cc-btn-col cc-col cc-col-3">
-                                    <button data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+                                    <button data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco">
                                         <i class="fas fa-arrow-left"></i>
                                         Anterior
                                     </button>
@@ -317,8 +318,8 @@ var _ccSyscareScript = function () {
 
         buttonProximo: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
-            wHtmlProximo = `<div class="cc-btn-col cc-col cc-col-3">
-                                <button data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco m-3">
+            wHtmlProximo = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
+                                <button data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
                                     <i class="fas fa-arrow-right"></i>
                                     Próximo
                                 </button>

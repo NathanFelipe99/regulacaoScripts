@@ -7,28 +7,38 @@ var _ccSyscareScript = function () {
     var wMItensCriados = []
     window.regulacaoScript = {}
     var wJsonSalvo = {}
-    var wContadorAtendimento, wContadorPergunta;
-    var wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
-    var wPerguntaTimer = moment("00:00:00", "HH:mm:ss");
+    var wContadorAtendimento, wContadorPergunta
+    var wAtendimentoTimer = moment("00:00:00", "HH:mm:ss")
+    var wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
     /* RICHARD */
     var wScriptCodigoRegulacao = 0
 
-    this.limpaInputs = async function () {
-        for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
-            $('[id="fme-scripts"]').find('input').val('')
-            $('[id="fme-scripts"] [type="radio"]').prop('checked', false)
-            $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
-            $('[id="fme-scripts"] [type="text"]').val('')
-        }
-        $('[id="fme-timer-scripts]').text('')
-        $('[id="fme-scripts-pergunta-timer"]').text('')
-        $('[id="fme-scripts"]').empty()
-        wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
-        $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-            await _ccSyscare2.listen.clickScript().then(function () {
-                _ccSyscare2.timer.iniciaAtendimento()
+    this.limpa = {
+        limpaInputs: async function () {
+            for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
+                $('[id="fme-scripts"]').find('input').val('')
+                $('[id="fme-scripts"] [type="radio"]').prop('checked', false)
+                $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
+                $('[id="fme-scripts"] [type="text"]').val('')
+            }
+            debugger
+            $('[id="fme-timer-scripts]').text('')
+            $('[id="fme-scripts-pergunta-timer"]').text('')
+            $('[id="fme-scripts"]').empty()
+            wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
+            $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
+                await _ccSyscare2.listen.clickScript().then(function () {
+                    _ccSyscare2.timer.iniciaAtendimento()
+                })
             })
-        })
+        },
+        limpaVetores: async function (pScriptCodigo) {
+            var wScriptCodigo = pScriptCodigo
+            wVetor = []
+            wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
+            wJsonSalvo = {}
+            wMItensCriados = []
+        }
     }
 
     this.timer = {
@@ -37,7 +47,7 @@ var _ccSyscareScript = function () {
             wContadorAtendimento = setInterval(function () {
                 wAtendimentoTimer = wAtendimentoTimer.add(1, 'seconds')                
                 wDomTime.html("TEMPO DO ATENDIMENTO: " + wAtendimentoTimer.format("HH:mm:ss"))
-            }, 1000);
+            }, 1000)
         },
 
         iniciaPergunta: async function () {
@@ -46,7 +56,7 @@ var _ccSyscareScript = function () {
             wContadorPergunta = setInterval(function () {
                 wPerguntaTimer = wPerguntaTimer.add(1, 'seconds')                
                 wDomTime.html("TEMPO DA PERGUNTA: " + wPerguntaTimer.format("HH:mm:ss"))
-            }, 1000);
+            }, 1000)
         }
     }
 
@@ -169,7 +179,7 @@ var _ccSyscareScript = function () {
                     </div>
                     <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display: block;background-color:white">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 0 7px">
+                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 INICIAR
@@ -306,8 +316,8 @@ var _ccSyscareScript = function () {
 
         buttonAnterior: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
-            var wHtmlAnterior = `<div class="cc-btn-col cc-col cc-col-3">
-                                    <button data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco m-3 cc-bg-preto cc-text-branco">
+            var wHtmlAnterior = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
+                                    <button data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
                                         <i class="fas fa-arrow-left"></i>
                                         Anterior
                                     </button>
@@ -567,12 +577,9 @@ var _ccSyscareScript = function () {
                 console.log("VETOR", wVetor)
                 clearInterval(wContadorAtendimento)
                 clearInterval(wContadorPergunta)
-                wVetor = []
-                wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
-                wJsonSalvo = {}
                 // wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")
-                wMItensCriados = []
-                await _ccSyscare2.limpaInputs()
+                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
+                await _ccSyscare2.limpa.limpaInputs()
             })
         },
 
@@ -587,9 +594,19 @@ var _ccSyscareScript = function () {
         clickReiniciar: async function () {
             $(document).off(cc.evento.click, "[data-script-btn-reiniciar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-reiniciar='true']", async function () {
-                // await _ccSyscare2.limpaInputs()
-                // await _ccSyscare2.monta.htmlScripts(cLower(pObjReferencia))
-                console.log("CONSOLE DE LA MASSA");
+                var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")
+                console.log("CAIU AQUI");
+                clearInterval(wContadorPergunta)
+                clearInterval(wContadorAtendimento)
+                // wVetor = []
+                // wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
+                // wJsonSalvo = {}
+                // wMItensCriados = []
+                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
+                await _ccSyscare2.limpa.limpaInputs()
+                $("[id='container-btn-reiniciar']").attr('hidden', true)
+                $("[id='container-btn-finalizar']").attr('hidden', true)
+                $("[id='container-btn-iniciar']").attr('hidden', false)                
             })
         }
     }

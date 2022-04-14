@@ -179,7 +179,7 @@ var _ccSyscareScript = function () {
                     </div>
                     <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display: block;background-color:white">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px">
+                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px; height:100px">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-play mr-2"></i> INICIAR
@@ -198,7 +198,9 @@ var _ccSyscareScript = function () {
                     </div>
                 </div>                
             `)
+            
             await _ccSyscare2.listen.clickIniciar(pObjReferencia)
+            await _ccSyscare2.listen.clickReiniciar()
         },
 
         htmlScripts: async function () {
@@ -212,7 +214,7 @@ var _ccSyscareScript = function () {
                 wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[id='mnu-dados-regulacao-itens']").html(`                    
-                    <div name="mnu-scripts" id="mnu-scripts" style="display:flex;flex-direction:row;margin-left:1rem">${wHtml}</div>
+                    <div name="mnu-scripts" id="mnu-scripts" style="display:block">${wHtml}</div>
                     <div name="fme-timer-scripts" id="fme-timer-scripts" style="font-size:16px;text-align: center;font-weight: bold;" class="my-3"></div>
                     <hr style="background-color:white">
                     <div name="fme-scripts" id="fme-scripts" style="background-color:white"></div>                                            
@@ -595,15 +597,9 @@ var _ccSyscareScript = function () {
             $(document).off(cc.evento.click, "[data-script-btn-reiniciar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-reiniciar='true']", async function () {
                 var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")
-                console.log("CAIU AQUI");
-                wContadorPergunta = ""
+                debugger           
                 clearInterval(wContadorPergunta)
-                wContadorAtendimento = ""
                 clearInterval(wContadorAtendimento)
-                // wVetor = []
-                // wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}
-                // wJsonSalvo = {}
-                // wMItensCriados = []
                 await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
                 await _ccSyscare2.limpa.limpaInputs()
                 $("[id='container-btn-reiniciar']").attr('hidden', true)
@@ -622,8 +618,7 @@ var _ccSyscareScript = function () {
     this.cria = async function (pScript, pItem, pBoDesc) {
         /** REMOVIDO pBoLimpa --> DESUSO (NATHAN 13/04) */
         _ccSyscare2.listen.clickProximo()
-        _ccSyscare2.listen.clickAnterior()
-        _ccSyscare2.listen.clickReiniciar()
+        _ccSyscare2.listen.clickAnterior()        
         _ccSyscare2.listen.clickFinalizar()
         wScriptCodigoRegulacao = pScript
         clearInterval(wContadorPergunta)

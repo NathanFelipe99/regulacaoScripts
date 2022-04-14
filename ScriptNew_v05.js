@@ -22,10 +22,10 @@ var _ccSyscareScript = function () {
                 $('[id="fme-scripts"] [type="text"]').val('')
             }
             debugger
-            $('[id="fme-timer-scripts]').text('')
-            $('[id="fme-scripts-pergunta-timer"]').text('')
-            $('[id="fme-scripts"]').empty()
+            $('[id="fme-timer-scripts"]').text('')
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
+            $('[id="fme-scripts-pergunta-timer"]').text('')
+            $('[id="mnu-dados-regulacao-itens"]').empty()            
             $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
                 await _ccSyscare2.listen.clickScript().then(function () {
                     _ccSyscare2.timer.iniciaAtendimento()
@@ -182,17 +182,17 @@ var _ccSyscareScript = function () {
                     <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
-                                INICIAR
+                                <i class="fas fa-play mr-2"></i> INICIAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4" id="container-btn-reiniciar" hidden="true">
                             <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
-                                REINICIAR
+                               <i class="fas fa-undo mr-2"></i> REINICIAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right" id="container-btn-finalizar" hidden="true">
                             <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco cc-text-branco mt-3 ml-3" style="width: 20rem;font-weight: bold;">
-                                FINALIZAR
+                                <i class="fas fa-check mr-2"></i> FINALIZAR
                             </button>
                         </div>       
                     </div>
@@ -291,7 +291,7 @@ var _ccSyscareScript = function () {
                         wRotinaCarga = JSON.parse(wRotinaCarga)
                         wMOptions = Object.getOwnPropertyNames(wRotinaCarga)
                         wHtml += `<h4 style="background: lightgrey;margin-top: 5px;padding: 5px;border-radius: 5px;" name="data-anPergunta" for="${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto} ${wScriptItem.boRequerido ? '<sup class="text-danger">*</sup>' : ""}</h4>
-                                  <div id='container-inputs'> `
+                                <div id='container-inputs'> `
                         for (let wIdx = 0; wIdx < wMOptions.length; wIdx++) {
                             wHtml += `
                                     <div class="cc-inp cc-col cc-col-${wColspan}" style="background-color:white">
@@ -596,7 +596,9 @@ var _ccSyscareScript = function () {
             $(document).on(cc.evento.click, "[data-script-btn-reiniciar='true']", async function () {
                 var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")
                 console.log("CAIU AQUI");
+                wContadorPergunta = ""
                 clearInterval(wContadorPergunta)
+                wContadorAtendimento = ""
                 clearInterval(wContadorAtendimento)
                 // wVetor = []
                 // wJsonScriptRegulacao["" + wScriptCodigo + ""] = {}

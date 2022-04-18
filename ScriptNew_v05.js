@@ -11,7 +11,7 @@ var _ccSyscareScript = function () {
     var wAtendimentoTimer = moment("00:00:00", "HH:mm:ss")
     var wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
     /* RICHARD */
-    var wScriptCodigoRegulacao = 0
+    var wScriptCodigoRegulacao = 0    
 
     this.limpa = {
         limpaInputs: async function () {
@@ -177,21 +177,21 @@ var _ccSyscareScript = function () {
                             <input value="${window.cc.global.cnProfissional}" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" readonly>
                         </div>
                     </div>
-                    <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display:block;background-color:white; margin:0.2rem">
+                    <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display:block;background-color:white; padding:0.2rem">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px;">
+                    <div name="fme-buttons-control" id="fme-buttons-control" class="mb-3" style="background-color:white;display:flex; flex-direction:row;justify-content: space-between">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
-                            <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
+                            <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-play mr-2"></i> INICIAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4" id="container-btn-reiniciar" hidden="true">
-                            <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
+                            <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
                                <i class="fas fa-undo mr-2"></i> REINICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right" id="container-btn-finalizar" hidden="true">
-                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco mt-3 ml-3" style="width: 20rem;font-weight: bold;">
+                        <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end" id="container-btn-finalizar" hidden="true">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-check mr-2"></i> FINALIZAR
                             </button>
                         </div>       
@@ -698,4 +698,5 @@ var _ccSyscareScript = function () {
 }
 
 var _ccSyscare2 = new _ccSyscareScript()
-_ccSyscare2.inicia('frmshc.paginaprincipal')
+// _ccSyscare2.inicia('frmshc.paginaprincipal')
+_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

@@ -190,7 +190,7 @@ var _ccSyscareScript = function () {
                                <i class="fas fa-undo mr-2"></i> REINICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end" id="container-btn-finalizar" hidden="true">
+                        <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end; margin-right:1.5rem !important" id="container-btn-finalizar" hidden="true">
                             <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-check mr-2"></i> FINALIZAR
                             </button>
@@ -342,7 +342,6 @@ var _ccSyscareScript = function () {
 
         htmlButtons: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
-
             var wHtmlButtons = (pItem == 0) ? await _ccSyscare2.monta.buttonProximo(pItem) : (regulacaoScript[wScriptCodigoRegulacao][pItem].boScriptFim == 1) ? await _ccSyscare2.monta.buttonAnterior(pItem) : await _ccSyscare2.monta.buttonAnterior(pItem) + await _ccSyscare2.monta.buttonProximo(pItem)
             $("[name='data-buttons-script']").html(`
                 <div class="cc-col w-100" style="background-color:white">
@@ -465,7 +464,6 @@ var _ccSyscareScript = function () {
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
 
                 wJsonSalvo = wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]
-
 
                 /** VERIFICA SE O ITEM JÁ FOI PREENCHIDO E FAZ A TRATATIVA DEVIDA */
                 if (wJsonSalvo) {

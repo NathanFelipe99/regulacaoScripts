@@ -158,7 +158,7 @@ var _ccSyscareScript = function () {
     this.monta = {
         htmlCabecalho: async function (pObjReferencia) {
             $("[name='" + pObjReferencia + "']").html(`
-                <div style="max-width: 800px;margin-left: auto;margin-right: auto;background-color:white;display: grid; " class="container-inputs" id="container-inputs">
+                <div style="max-width: 800px;margin: auto;background-color:white;display: grid; " class="container-inputs" id="container-inputs">
                     <div id="mnu-dados-regulacao" name="mnu-dados-regulacao" style="display: grid; grid-template-columns: repeat(auto-fill, 186px); background-color:white; justify-content:center">
                         <div class="m-4">
                                 <label for="cnRegulacao"><strong>Código da Regulação</strong></label>
@@ -177,9 +177,9 @@ var _ccSyscareScript = function () {
                             <input value="${window.cc.global.cnProfissional}" maxlength="50" name="cnProfissional" data-interacao-tp="1" class="form-control cc-col-4" placeholder="" readonly>
                         </div>
                     </div>
-                    <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display: block;background-color:white">
+                    <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display:block;background-color:white; margin:0.2rem">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px; height:100px">
+                    <div name="fme-buttons-control" id="fme-buttons-control" style="background-color:white;padding-right:1.5rem; margin: 7px;">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco m-3" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-play mr-2"></i> INICIAR
@@ -191,7 +191,7 @@ var _ccSyscareScript = function () {
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right" id="container-btn-finalizar" hidden="true">
-                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco cc-text-branco mt-3 ml-3" style="width: 20rem;font-weight: bold;">
+                            <button data-script-btn-finalizar='true' class="cc-btn btn btn-block cc-bg-verde cc-text-branco mt-3 ml-3" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-check mr-2"></i> FINALIZAR
                             </button>
                         </div>       
@@ -211,7 +211,7 @@ var _ccSyscareScript = function () {
             var wHtml = ""
             for (var wIdx = 0; wIdx < wData.length; wIdx++) {
                 const wScript = wData[wIdx]
-                wHtml += `<button data-btn-script='true' class="mx-1 ml-4 mb-2 btn cc-bg-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
+                wHtml += `<button data-btn-script='true' class="mx-3 my-2 btn cc-bg-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[id='mnu-dados-regulacao-itens']").html(`                    
                     <div name="mnu-scripts" id="mnu-scripts" style="display:block">${wHtml}</div>
@@ -490,11 +490,13 @@ var _ccSyscareScript = function () {
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
                 clearInterval(wContadorPergunta)
                 wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
-
+                
                 if (wDirecionamentoCondicional != "") {
                     var wRetornoDireciona = await _ccSyscare2.direciona(wIdxScriptItem, wValorInteracao)
-                    if (wRetornoDireciona == true) {
+                    if (wRetornoDireciona == true) {                           
                         await _ccSyscare2.busca.buscaRegulacaoScriptItens(wDirecionamentoCodigo, wDirecionamentoIndex)
+                        var wScriptDireciona = $(`[data-btn-script='true'][data-script='${wDirecionamentoCodigo}']`).text()
+                        _cc.msg(`Direcionando para o Script ${wScriptDireciona}`, "warning2", 3)
                     } else {
                         await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
                     }

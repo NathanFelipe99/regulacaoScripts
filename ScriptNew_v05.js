@@ -15,6 +15,7 @@ var _ccSyscareScript = function () {
 
     this.limpa = {
         limpaInputs: async function () {
+            debugger
             for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
                 $('[id="fme-scripts"]').find('input').val('')
                 $('[id="fme-scripts"] [type="radio"]').prop('checked', false)
@@ -25,12 +26,10 @@ var _ccSyscareScript = function () {
             $('[id="fme-timer-scripts"]').text('')
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
             $('[id="fme-scripts-pergunta-timer"]').text('')
-            $('[id="mnu-dados-regulacao-itens"]').empty()            
-            $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-                await _ccSyscare2.listen.clickScript().then(function () {
-                    _ccSyscare2.timer.iniciaAtendimento()
-                })
-            })
+            $('[id="mnu-dados-regulacao-itens"]').empty()                        
+            $('[id="container-btn-reiniciar"]').attr('hidden', true)
+            $('[id="container-btn-finalizar"]').attr('hidden', true)
+            $('[id="container-btn-iniciar"]').attr('hidden', false)
         },
         limpaVetores: async function (pScriptCodigo) {
             var wScriptCodigo = pScriptCodigo
@@ -179,13 +178,13 @@ var _ccSyscareScript = function () {
                     </div>
                     <div id="mnu-dados-regulacao-itens" name="mnu-dados-regulacao-itens" style="display:block;background-color:white; padding:0.2rem">
                     </div>                    
-                    <div name="fme-buttons-control" id="fme-buttons-control" class="mb-3" style="background-color:white;display:flex; flex-direction:row;justify-content: space-between">
+                    <div name="fme-buttons-control" id="fme-buttons-control" class="mb-3 ml-2" style="background-color:white;display:flex; flex-direction:row;justify-content: space-between">
                         <div class="cc-btn-col cc-col cc-col-4 pl-3" id="container-btn-iniciar">
                             <button data-script-btn-iniciar='true' class="cc-btn btn btn-block cc-bg-azul cc-text-branco" style="width: 20rem;font-weight: bold;">
                                 <i class="fas fa-play mr-2"></i> INICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4" id="container-btn-reiniciar" hidden="true">
+                        <div class="cc-btn-col cc-col cc-col-4 ml-2" id="container-btn-reiniciar" hidden="true">
                             <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
                                <i class="fas fa-undo mr-2"></i> REINICIAR
                             </button>
@@ -467,7 +466,7 @@ var _ccSyscareScript = function () {
 
                 /** VERIFICA SE O ITEM JÁ FOI PREENCHIDO E FAZ A TRATATIVA DEVIDA */
                 if (wJsonSalvo) {
-                    console.log("wJsonSalvo", wJsonSalvo);
+                    // console.log("wJsonSalvo", wJsonSalvo);
                     var wItemJaExiste = (wJsonSalvo.cnRegulacaoScript == wScriptCodigo) && (wJsonSalvo.csRegulacaoScriptItem == wScriptItem) ? true : false
                     if (wItemJaExiste) {
                         if ((wValorInteracao !== "") && (wValorInteracao !== wJsonSalvo.anResposta || wValorObservacao !== wJsonSalvo.anOBS)) {
@@ -484,7 +483,7 @@ var _ccSyscareScript = function () {
                     }
                 }
                 wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].duracaoTemp = wPerguntaTimer.format("HH:mm:ss")
-                console.log("ADICIONOU AO VETOR", wVetor)
+                // console.log("ADICIONOU AO VETOR", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
                 clearInterval(wContadorPergunta)
                 wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
@@ -576,10 +575,10 @@ var _ccSyscareScript = function () {
                         console.log(err)
                     });
                 }
-                console.log("VETOR", wVetor)
+                // console.log("VETOR", wVetor)
                 clearInterval(wContadorAtendimento)
                 clearInterval(wContadorPergunta)
-                // wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")
+                // wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")            
                 await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
                 await _ccSyscare2.limpa.limpaInputs()
             })
@@ -596,12 +595,11 @@ var _ccSyscareScript = function () {
         clickReiniciar: async function () {
             $(document).off(cc.evento.click, "[data-script-btn-reiniciar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-reiniciar='true']", async function () {
-                var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")
-                debugger           
+                var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")                           
                 clearInterval(wContadorPergunta)
                 clearInterval(wContadorAtendimento)
-                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
                 await _ccSyscare2.limpa.limpaInputs()
+                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
                 $("[id='container-btn-reiniciar']").attr('hidden', true)
                 $("[id='container-btn-finalizar']").attr('hidden', true)
                 $("[id='container-btn-iniciar']").attr('hidden', false)                
@@ -696,5 +694,5 @@ var _ccSyscareScript = function () {
 }
 
 var _ccSyscare2 = new _ccSyscareScript()
-// _ccSyscare2.inicia('frmshc.paginaprincipal')
-_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')
+_ccSyscare2.inicia('frmshc.paginaprincipal')
+//_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

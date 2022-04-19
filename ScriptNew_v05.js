@@ -508,7 +508,6 @@ var _ccSyscareScript = function () {
         },
 
         clickFinalizar: async function () {
-
             let wSaveUrl = cc.url.ccasegd_token + "tabela=shcregulacaomov"
             let wSaveMthd = "post"
             $(document).off(cc.evento.click, "[data-script-btn-finalizar='true']")
@@ -696,5 +695,5 @@ var _ccSyscareScript = function () {
 }
 
 var _ccSyscare2 = new _ccSyscareScript()
-_ccSyscare2.inicia('frmshc.paginaprincipal')
-//_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')
+// _ccSyscare2.inicia('frmshc.paginaprincipal')
+_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

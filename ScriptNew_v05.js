@@ -228,7 +228,7 @@ var _ccSyscareScript = function () {
                     <div name="fme-timer-scripts" id="fme-timer-scripts" style="font-size:16px;text-align: center;font-weight: bold;" class="my-3"></div>
                     <hr style="background-color:white">
                     <div name="fme-scripts" id="fme-scripts" style="background-color:white"></div>                                            
-                    <div name="fme-scripts-pergunta-timer" id="fme-scripts-pergunta-timer" style="background-color:white;font-size:12px;text-align: center;font-weight: bold; float:right; padding-right: 3.3rem"></div>
+                    <div name="fme-scripts-pergunta-timer" id="fme-scripts-pergunta-timer" style="background-color:white;font-size:12px;text-align: center;font-weight: bold; float:left; padding-right: 3.3rem; margin-left:2rem" class="my-3"></div>
             `)
             await _ccSyscare2.listen.clickScript()
             await _ccSyscare2.timer.iniciaAtendimento()
@@ -247,8 +247,7 @@ var _ccSyscareScript = function () {
                     wHtml += `
                         <div class="cc-inp cc-col cc-col-${wColspan}" style="background-color:white">
                             <div class="form-group position-relative">
-                                <div>
-                                    ${wScriptItem.cnInteracaoTP != 1 ? '<label for=${wScriptItem.cnRegulacaoScript}-${wScriptItem.csRegulacaoScriptItem}">${wScriptItem.anInteracaoTexto}<small>${wScriptItem.anInstrucoes}</small></label>' : ""}
+                                <div>                                    
                                     <input value='' name='data-anResposta' maxlength='${wMaxLen}' data-script-omt='${wScriptItem.cnRegulacaoScript}' data-interacao-requerido='${wScriptItem.boRequerido}' data-interacao-tp='${wScriptItem.cnInteracaoTP}' data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' class="form-control" placeholder="">
                                 </div>
                             </div>

@@ -493,7 +493,7 @@ var _ccSyscareScript = function () {
                         await _ccSyscare2.monta.montaJson(wScriptCodigo, wScriptItem, wValorInteracao)
                     }
                 }
-                wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].duracaoTemp = wPerguntaTimer.format("HH:mm:ss")
+                if (wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""]) wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].duracaoTemp = wPerguntaTimer.format("HH:mm:ss")
                 console.log("ADICIONOU AO VETOR", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
                 clearInterval(wContadorPergunta)
@@ -702,5 +702,5 @@ var _ccSyscareScript = function () {
 }
 
 var _ccSyscare2 = new _ccSyscareScript()
-_ccSyscare2.inicia('frmshc.paginaprincipal')
-//_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')
+// _ccSyscare2.inicia('frmshc.paginaprincipal')
+_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

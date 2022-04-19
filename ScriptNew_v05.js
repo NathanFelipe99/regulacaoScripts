@@ -21,7 +21,7 @@ var _ccSyscareScript = function () {
                 $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
                 $('[id="fme-scripts"] [type="text"]').val('')
             }
-            $('[id="mnu-scripts"]').find('button').css('background-color', '#585858')
+            $('[id="mnu-scripts"]').find('button').css('background-color', '#585858', 'color', '#FFFFFF')
             $('[id="fme-timer-scripts"]').text('')
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
             $('[id="fme-scripts-pergunta-timer"]').text('')
@@ -38,7 +38,7 @@ var _ccSyscareScript = function () {
             wJsonSalvo = {}
             wMItensCriados = []
         }
-    }
+    },
 
     this.timer = {
         iniciaAtendimento: async function () {
@@ -100,6 +100,17 @@ var _ccSyscareScript = function () {
         }
     }
 
+    this.changeColor = async function (pCodigo) {
+        var wScripts = $('[data-btn-script="true"]')
+        wScripts.each(function () {
+            if ($(this).attr("data-script") == parseInt(pCodigo)) {
+                $(this).removeClass('cc-btn-cinza-escuro').addClass('cc-btn-cinza')
+            } else {
+                $(this).removeClass('cc-btn-cinza').addClass('cc-btn-cinza-escuro')
+            }
+        })
+    }
+
     this.busca = {
         buscaRegulacaoScript: async function () {
             var wTabela = "shcregulacaoscript"
@@ -149,7 +160,7 @@ var _ccSyscareScript = function () {
                         `
                     $("[name='fme-scripts']").html(wHtml)
                     regulacaoScript[pScript] = wData;
-                    wScriptItem ? await _ccSyscare2.cria(pScript, wScriptItem) : await _ccSyscare2.cria(pScript, 0)
+                    wScriptItem ? await _ccSyscare2.cria(pScript, wScriptItem) : await _ccSyscare2.cria(pScript, 0)                    
                 })
         }
     }
@@ -186,7 +197,7 @@ var _ccSyscareScript = function () {
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 ml-2" id="container-btn-reiniciar" hidden="true">
                             <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
-                               <i class="fas fa-undo mr-2"></i> REINICIAR
+                            <i class="fas fa-undo mr-2"></i> REINICIAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end; margin-right:1.5rem !important" id="container-btn-finalizar" hidden="true">
@@ -210,7 +221,7 @@ var _ccSyscareScript = function () {
             var wHtml = ""
             for (var wIdx = 0; wIdx < wData.length; wIdx++) {
                 const wScript = wData[wIdx]
-                wHtml += `<button data-btn-script='true' class="mx-3 my-2 btn cc-bg-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
+                wHtml += `<button style="font-weight: bold;" data-btn-script='true' class="mx-2 my-2 btn cc-btn-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[id='mnu-dados-regulacao-itens']").html(`                    
                     <div name="mnu-scripts" id="mnu-scripts" style="display:block">${wHtml}</div>
@@ -318,7 +329,7 @@ var _ccSyscareScript = function () {
         buttonAnterior: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
             var wHtmlAnterior = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
-                                    <button style="font-weight: bold" data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
+                                    <button style="font-weight: bold" data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto">
                                         <i class="fas fa-arrow-left"></i>
                                         Anterior
                                     </button>
@@ -330,7 +341,7 @@ var _ccSyscareScript = function () {
         buttonProximo: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
             wHtmlProximo = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
-                                <button style="font-weight: bold" data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
+                                <button style="font-weight: bold" data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto">
                                     <i class="fas fa-arrow-right"></i>
                                     Próximo
                                 </button>
@@ -387,10 +398,8 @@ var _ccSyscareScript = function () {
     this.listen = {
         clickScript: async function () {
             $(document).off(cc.evento.click, "[data-btn-script='true']")
-            $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
-                $('[id="mnu-scripts"]').find('button').css('background-color', '#585858')
-                $(this).css("background-color", "#808080")
-                await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
+            $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {                           
+                await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))                
             })
         },
 
@@ -412,7 +421,7 @@ var _ccSyscareScript = function () {
                     // _ccSyscare2.cria(wUltimoCodigo, wMItensCriados.length - 1, "desc") // -> RICHARD
                     wMItensCriados.pop()
                     await _ccSyscare2.cria(wUltimoCodigo, wPos, "desc")
-
+                                    
                 } catch (error) {
                     console.error(error)
                 }
@@ -485,7 +494,7 @@ var _ccSyscareScript = function () {
                     }
                 }
                 wJsonScriptRegulacao["" + wScriptCodigo + ""]["" + wScriptItem + ""].duracaoTemp = wPerguntaTimer.format("HH:mm:ss")
-                // console.log("ADICIONOU AO VETOR", wVetor)
+                console.log("ADICIONOU AO VETOR", wVetor)
                 wMItensCriados.push([wScriptCodigo, wScriptItem])
                 clearInterval(wContadorPergunta)
                 wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
@@ -495,9 +504,7 @@ var _ccSyscareScript = function () {
                     if (wRetornoDireciona == true) {                           
                         await _ccSyscare2.busca.buscaRegulacaoScriptItens(wDirecionamentoCodigo, wDirecionamentoIndex)
                         var wScriptDireciona = $(`[data-btn-script='true'][data-script='${wDirecionamentoCodigo}']`).text()
-                        _cc.msg(`Direcionando para o Script ${wScriptDireciona}`, "warning2", 3)
-                        $('[id="mnu-scripts"]').find('button').css("background-color", "#585858")
-                        $(`[data-btn-script='true'][data-script='${wDirecionamentoCodigo}']`).css("background-color", "#808080")
+                        _cc.msg(`Direcionando para o Script ${wScriptDireciona}`, "warning2", 3)                        
                     } else {
                         await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
                     }
@@ -578,7 +585,7 @@ var _ccSyscareScript = function () {
                         console.log(err)
                     });
                 }
-                // console.log("VETOR", wVetor)
+                console.log("VETOR", wVetor)
                 clearInterval(wContadorAtendimento)
                 clearInterval(wContadorPergunta)            
                 await _ccSyscare2.limpa.limpaInputs()
@@ -605,13 +612,12 @@ var _ccSyscareScript = function () {
                 $("[id='container-btn-finalizar']").attr('hidden', true)
                 $("[id='container-btn-iniciar']").attr('hidden', false)                
             })
-        }
+        },
     }
 
     this.inicia = async function (pObjReferencia) {
         // await _ccSyscare2.monta.htmlScripts(cLower(pObjReferencia))
         await _ccSyscare2.monta.htmlCabecalho(cLower(pObjReferencia))
-
     }
 
     this.cria = async function (pScript, pItem, pBoDesc) {
@@ -620,8 +626,9 @@ var _ccSyscareScript = function () {
         _ccSyscare2.listen.clickAnterior()        
         _ccSyscare2.listen.clickFinalizar()
         wScriptCodigoRegulacao = pScript
-        clearInterval(wContadorPergunta)
-
+        clearInterval(wContadorPergunta) 
+        await _ccSyscare2.changeColor(wScriptCodigoRegulacao)
+            
         var wScriptItem = regulacaoScript[pScript][pItem]
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
 
@@ -695,5 +702,5 @@ var _ccSyscareScript = function () {
 }
 
 var _ccSyscare2 = new _ccSyscareScript()
-// _ccSyscare2.inicia('frmshc.paginaprincipal')
-_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')
+_ccSyscare2.inicia('frmshc.paginaprincipal')
+//_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

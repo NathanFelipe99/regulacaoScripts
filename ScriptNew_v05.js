@@ -26,7 +26,7 @@ var _ccSyscareScript = function () {
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
             $('[id="fme-scripts-pergunta-timer"]').text('')
             $('[id="mnu-dados-regulacao-itens"]').empty()                        
-            $('[id="container-btn-reiniciar"]').attr('hidden', true)
+            $('[id="container-btn-cancelar"]').attr('hidden', true)
             $('[id="container-btn-finalizar"]').attr('hidden', true)
             $('[id="container-btn-iniciar"]').attr('hidden', false)
         },
@@ -195,9 +195,9 @@ var _ccSyscareScript = function () {
                                 <i class="fas fa-play mr-2"></i> INICIAR
                             </button>
                         </div>
-                        <div class="cc-btn-col cc-col cc-col-4 ml-2" id="container-btn-reiniciar" hidden="true">
-                            <button data-script-btn-reiniciar='true' class="cc-btn btn btn-block cc-bg-laranja-claro cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
-                            <i class="fas fa-undo mr-2"></i> REINICIAR
+                        <div class="cc-btn-col cc-col cc-col-4 ml-2" id="container-btn-cancelar" hidden="true">
+                            <button data-script-btn-cancelar='true' class="cc-btn btn btn-block cc-bg-vermelho cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
+                            <i class="fas fa-ban mr-2"></i> CANCELAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end; margin-right:1.5rem !important" id="container-btn-finalizar" hidden="true">
@@ -210,12 +210,12 @@ var _ccSyscareScript = function () {
             `)
             
             await _ccSyscare2.listen.clickIniciar(pObjReferencia)
-            await _ccSyscare2.listen.clickReiniciar()
+            await _ccSyscare2.listen.clickcancelar()
         },
 
         htmlScripts: async function () {
             $('[id="container-btn-iniciar"]').attr('hidden', true)
-            $('[id="container-btn-reiniciar"]').attr('hidden', false)
+            $('[id="container-btn-cancelar"]').attr('hidden', false)
             $('[id="container-btn-finalizar"]').attr('hidden', false)
             var wData = await _ccSyscare2.busca.buscaRegulacaoScript()
             var wHtml = ""
@@ -357,8 +357,9 @@ var _ccSyscareScript = function () {
                 <div class="cc-col w-100" style="background-color:white">
                     <div class="cc-inp cc-col cc-col-16 cc-row" data-interacao-tp="1" style="float:left">
                         <label for="data-anObservacao"><strong>OBSERVAÇÃO</strong></label>
-                        <textarea value="" maxlength="5000" name="data-anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
-                        data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 70px"></textarea>
+                        <textarea value="" maxlength="4000" name="data-anObservacao" data-script-omt='${wScriptItem.cnRegulacaoScript}'  
+                        data-script-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' data-interacao-tp="1" class="form-control" placeholder="" style="height: 120px"></textarea>
+                        <small style="font-weight:bold;font-size:15px !important">Instrução: ${wScriptItem.anInstrucoes}</small>
                     </div>
                     <div data-obj-seq="100" class="cc-row" style="border-color: rgb(0 0 0 / 40%)" id="data-buttons-principal">
                         ${wHtmlButtons}
@@ -600,15 +601,15 @@ var _ccSyscareScript = function () {
             })
         },
 
-        clickReiniciar: async function () {
-            $(document).off(cc.evento.click, "[data-script-btn-reiniciar='true']")
-            $(document).on(cc.evento.click, "[data-script-btn-reiniciar='true']", async function () {
+        clickcancelar: async function () {
+            $(document).off(cc.evento.click, "[data-script-btn-cancelar='true']")
+            $(document).on(cc.evento.click, "[data-script-btn-cancelar='true']", async function () {
                 var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")                           
                 clearInterval(wContadorPergunta)
                 clearInterval(wContadorAtendimento)
                 await _ccSyscare2.limpa.limpaInputs()
                 await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
-                $("[id='container-btn-reiniciar']").attr('hidden', true)
+                $("[id='container-btn-cancelar']").attr('hidden', true)
                 $("[id='container-btn-finalizar']").attr('hidden', true)
                 $("[id='container-btn-iniciar']").attr('hidden', false)                
             })

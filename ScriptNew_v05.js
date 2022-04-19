@@ -15,14 +15,13 @@ var _ccSyscareScript = function () {
 
     this.limpa = {
         limpaInputs: async function () {
-            debugger
             for (var wIdx = 0; wIdx < wVetor.length; wIdx++) {
                 $('[id="fme-scripts"]').find('input').val('')
                 $('[id="fme-scripts"] [type="radio"]').prop('checked', false)
                 $('[id="fme-scripts"] [type="checkbox"]').prop('checked', false)
                 $('[id="fme-scripts"] [type="text"]').val('')
             }
-            debugger
+            $('[id="mnu-scripts"]').find('button').css('background-color', '#585858')
             $('[id="fme-timer-scripts"]').text('')
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
             $('[id="fme-scripts-pergunta-timer"]').text('')
@@ -31,6 +30,7 @@ var _ccSyscareScript = function () {
             $('[id="container-btn-finalizar"]').attr('hidden', true)
             $('[id="container-btn-iniciar"]').attr('hidden', false)
         },
+
         limpaVetores: async function (pScriptCodigo) {
             var wScriptCodigo = pScriptCodigo
             wVetor = []
@@ -318,7 +318,7 @@ var _ccSyscareScript = function () {
         buttonAnterior: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
             var wHtmlAnterior = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
-                                    <button data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
+                                    <button style="font-weight: bold" data-script-btn-anterior='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
                                         <i class="fas fa-arrow-left"></i>
                                         Anterior
                                     </button>
@@ -330,7 +330,7 @@ var _ccSyscareScript = function () {
         buttonProximo: async function (pItem) {
             var wScriptItem = regulacaoScript[wScriptCodigoRegulacao][pItem]
             wHtmlProximo = `<div class="cc-btn-col cc-col cc-col-3 mr-3">
-                                <button data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
+                                <button style="font-weight: bold" data-script-btn-proximo='true' data-script-btn-omt='${wScriptItem.cnRegulacaoScript}' data-script-btn-omt-item='${wScriptItem.csRegulacaoScriptItem}' data-script-btn-omt-index='${pItem}' class="cc-btn btn btn-block cc-bg-preto cc-text-branco mt-3 cc-bg-preto cc-text-branco">
                                     <i class="fas fa-arrow-right"></i>
                                     Próximo
                                 </button>
@@ -388,6 +388,8 @@ var _ccSyscareScript = function () {
         clickScript: async function () {
             $(document).off(cc.evento.click, "[data-btn-script='true']")
             $(document).on(cc.evento.click, "[data-btn-script='true']", async function () {
+                $('[id="mnu-scripts"]').find('button').css('background-color', '#585858')
+                $(this).css("background-color", "#808080")
                 await _ccSyscare2.busca.buscaRegulacaoScriptItens($(this).attr("data-script"))
             })
         },
@@ -494,6 +496,8 @@ var _ccSyscareScript = function () {
                         await _ccSyscare2.busca.buscaRegulacaoScriptItens(wDirecionamentoCodigo, wDirecionamentoIndex)
                         var wScriptDireciona = $(`[data-btn-script='true'][data-script='${wDirecionamentoCodigo}']`).text()
                         _cc.msg(`Direcionando para o Script ${wScriptDireciona}`, "warning2", 3)
+                        $('[id="mnu-scripts"]').find('button').css("background-color", "#585858")
+                        $(`[data-btn-script='true'][data-script='${wDirecionamentoCodigo}']`).css("background-color", "#808080")
                     } else {
                         await _ccSyscare2.cria(wScriptCodigoRegulacao, parseInt(++wIdxScriptItem))
                     }
@@ -577,18 +581,16 @@ var _ccSyscareScript = function () {
                 }
                 // console.log("VETOR", wVetor)
                 clearInterval(wContadorAtendimento)
-                clearInterval(wContadorPergunta)
-                // wMItensCriados.length ? _ccSyscare2.cria(wMItensCriados[0][0], 0, null, "limpa") : _ccSyscare2.cria(wScriptCodigo, 0, null, "limpa")            
-                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
+                clearInterval(wContadorPergunta)            
                 await _ccSyscare2.limpa.limpaInputs()
+                await _ccSyscare2.limpa.limpaVetores(wScriptCodigo)
             })
         },
 
         clickIniciar: async function (pObjReferencia) {
             $(document).off(cc.evento.click, "[data-script-btn-iniciar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-iniciar='true']", async function () {         
-                await _ccSyscare2.monta.htmlScripts(cLower(pObjReferencia))
-                
+                await _ccSyscare2.monta.htmlScripts(cLower(pObjReferencia))            
             })
         },
 

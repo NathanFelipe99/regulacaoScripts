@@ -106,7 +106,7 @@ var _ccSyscareScript = function () {
         wScripts.each(function () {
             if ($(this).attr("data-script") == parseInt(pCodigo)) {
                 $(this).removeClass('cc-btn-cinza-escuro').addClass('cc-btn-cinza')
-                $(this).css('font-weight', 'bold')
+                $(this).css('font-weight', 'bold', 'border-style', 'inset', 'border-color', '#000000')
             } else {
                 $(this).removeClass('cc-btn-cinza').addClass('cc-btn-cinza-escuro')
             }

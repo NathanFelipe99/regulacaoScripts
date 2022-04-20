@@ -221,7 +221,7 @@ var _ccSyscareScript = function () {
             var wHtml = ""
             for (var wIdx = 0; wIdx < wData.length; wIdx++) {
                 const wScript = wData[wIdx]
-                wHtml += `<button style="font-weight: bold;" data-btn-script='true' class="mx-2 my-2 btn cc-btn-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
+                wHtml += `<button style="font-weight: bold position:relative;" data-btn-script='true' class="mx-2 my-2 btn cc-btn-cinza-escuro cc-text-branco" type="button" data-script="${wScript.cnRegulacaoScript}" >${wScript.nmRegulacaoScript}</button>`
             }
             $("[id='mnu-dados-regulacao-itens']").html(`                    
                     <div name="mnu-scripts" id="mnu-scripts" style="display:block">${wHtml}</div>
@@ -628,7 +628,8 @@ var _ccSyscareScript = function () {
         wScriptCodigoRegulacao = pScript
         clearInterval(wContadorPergunta) 
         await _ccSyscare2.changeColor(wScriptCodigoRegulacao)
-            
+        _cc.loading.show('Carregando...', 1, 'carregaPergunta')
+        
         var wScriptItem = regulacaoScript[pScript][pItem]
         pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
 
@@ -698,6 +699,8 @@ var _ccSyscareScript = function () {
             wPerguntaTimer = moment("00:00:00", "HH:mm:ss")
             _ccSyscare2.timer.iniciaPergunta()
         }
+
+        _cc.loading.hide('carregaPergunta', 1)
     }
 }
 

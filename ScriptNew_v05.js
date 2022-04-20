@@ -197,7 +197,7 @@ var _ccSyscareScript = function () {
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 ml-2" id="container-btn-cancelar" hidden="true">
                             <button data-script-btn-cancelar='true' class="cc-btn btn btn-block cc-bg-vermelho cc-text-branco mt-3 pl-3" style="width: 20rem;font-weight: bold;">
-                            <i class="fas fa-ban mr-2"></i> CANCELAR
+                                <i class="fas fa-ban mr-2"></i> CANCELAR
                             </button>
                         </div>
                         <div class="cc-btn-col cc-col cc-col-4 mr-2" style="float: right; align-self:flex-end; margin-right:1.5rem !important" id="container-btn-finalizar" hidden="true">
@@ -549,9 +549,7 @@ var _ccSyscareScript = function () {
                 }
                 // VERIIFICA SE A INTERAÇÃO É REQUERIDA E NÃO É VAZIA (STRING OU OBJECT)
                 if (wInteracaoHtm.attr("data-interacao-requerido") != "0") {
-                    if (await _ccSyscare2.valida(wValorInteracao) == false) {
-                        return
-                    }
+                    if (await _ccSyscare2.valida(wValorInteracao) == false) return
                 }
                 // VERIFICA SE A INTERAÇÃO É OBJETO SOMENTE APÓS PASSAR PELA VALIDAÇÃO --> NATHAN 
                 if (typeof (wValorInteracao) == 'object') wValorInteracao = JSON.stringify(wValorInteracao)
@@ -560,8 +558,6 @@ var _ccSyscareScript = function () {
 
                 var wUltimoCodigo = wMItensCriados[wMItensCriados.length - 1][0]
                 var wUltimoCodigoItem = wMItensCriados[wMItensCriados.length - 1][1]
-                // var wUltimoCodigo = wJsonSalvo.cnRegulacaoScript
-                // var wUltimoCodigoItem = wJsonSalvo.csRegulacaoScriptItem
 
                 var wCodigoCriado = wVetor.findIndex((script => script.cnRegulacaoScript == wUltimoCodigo) && (item => item.csRegulacaoScriptItem == wUltimoCodigoItem && item.boSubstituido == "0"))
                 if (wCodigoCriado != -1 && wValorInteracao != "") {
@@ -575,9 +571,8 @@ var _ccSyscareScript = function () {
                 for (let wIdx = 0; wIdx < wVetor.length; wIdx++) {
                     delete wVetor[wIdx].duracaoTemp
                     await _cc.ajax(wSaveUrl, wSaveMthd, "application/json", JSON.stringify(wVetor[wIdx]), "", "").then((result) => {
-                        // console.log("DATA RESULT: ", result)
-                        if (result.cnRetorno != 0) {
-                            _cc.msg("Erro ao salvar!", "danger")
+                        if (result.cnRetorno != 0) {                            
+                            _cc.msg(`Erro ao salvar: ${result.anMensagem}!`, "danger")
                         } else {
                             _cc.msg("Registro salvo com sucesso!", "success")
                         }

@@ -106,6 +106,7 @@ var _ccSyscareScript = function () {
         wScripts.each(function () {
             if ($(this).attr("data-script") == parseInt(pCodigo)) {
                 $(this).removeClass('cc-btn-cinza-escuro').addClass('cc-btn-cinza')
+                $(this).css('font-weight', 'bold')
             } else {
                 $(this).removeClass('cc-btn-cinza').addClass('cc-btn-cinza-escuro')
             }
@@ -116,7 +117,7 @@ var _ccSyscareScript = function () {
         buscaRegulacaoScript: async function () {
             var wTabela = "shcregulacaoscript"
             var wJsn = `{
-                obj:  '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema"), +1, 10, 0, 0, 1)}'
+                obj:  '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=cnRegulacaoScript,nmRegulacaoScript,dsRegulacaoScript,anRegulacaoTema" + "&where=boInativo=0"), +1, 10, 0, 0, 1)}'
             }`
             var wAjax = await _cc.ajax(cc.url.ccasegd + "/wsTB2", "post", "application/json", wJsn)
             return await $.when(wAjax).then(
@@ -139,9 +140,9 @@ var _ccSyscareScript = function () {
             var wColunas = "cnRegulacaoScript, csRegulacaoScriptItem, nrOrdem, anInteracaoTexto, cnInteracaoTP,qtInteracaoTamanho,qtInteracaoOpcao,anInteracaoCondicional "
             wColunas += ",anInstrucoes,anDirecionamentoCondicional,cnDirecionamentoScript,cnDirecionamentoScriptItem,boScriptFim,boRequerido,qtInteracaoColspan"
             var wOrderBy = "nrOrdem"
-            var wWhere = "cnRegulacaoScript="
+            var wWhere = `cnRegulacaoScript=${pScript} AND boInativo=0`
             var wJsnItens = `{
-                obj: '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=" + wColunas + "&orderby=" + wOrderBy + "&where=" + wWhere + pScript), +1, 10, 0, 0, 1)}'
+                obj: '${_ccCD1(encodeURI("tk=" + cc.global.token + "&tabela=" + wTabela + "&colunas=" + wColunas + "&orderby=" + wOrderBy + "&where=" + wWhere), +1, 10, 0, 0, 1)}'
             }`
             wJsonScriptRegulacao["" + pScript + ""] = (wJsonScriptRegulacao["" + pScript + ""]) ? (wJsonScriptRegulacao["" + pScript + ""]) : {}
             console.log("É CONSULTA, FAÇA O AJAX FILHÃO");
@@ -211,7 +212,7 @@ var _ccSyscareScript = function () {
             `)
             
             await _ccSyscare2.listen.clickIniciar(pObjReferencia)
-            await _ccSyscare2.listen.clickcancelar()
+            await _ccSyscare2.listen.clickCancelar()
         },
 
         htmlScripts: async function () {
@@ -596,7 +597,7 @@ var _ccSyscareScript = function () {
             })
         },
 
-        clickcancelar: async function () {
+        clickCancelar: async function () {
             $(document).off(cc.evento.click, "[data-script-btn-cancelar='true']")
             $(document).on(cc.evento.click, "[data-script-btn-cancelar='true']", async function () {
                 var wScriptCodigo = $("[data-script-btn-proximo='true']").attr("data-script-btn-omt")                           

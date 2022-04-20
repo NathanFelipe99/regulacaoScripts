@@ -106,7 +106,7 @@ var _ccSyscareScript = function () {
         wScripts.each(function () {
             if ($(this).attr("data-script") == parseInt(pCodigo)) {
                 $(this).removeClass('cc-btn-cinza-escuro').addClass('cc-btn-cinza')
-                $(this).css('font-weight', 'bold', 'border-style', 'inset', 'border-color', '#000000')
+                $(this).css('font-weight', 'bold')
             } else {
                 $(this).removeClass('cc-btn-cinza').addClass('cc-btn-cinza-escuro')
             }
@@ -703,4 +703,4 @@ var _ccSyscareScript = function () {
 
 var _ccSyscare2 = new _ccSyscareScript()
 // _ccSyscare2.inicia('frmshc.paginaprincipal')
-_ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')
+// _ccSyscare2.inicia('frmshc.Remocao.Main.Dados.RegMov.Script.CodigoScript')

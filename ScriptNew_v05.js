@@ -25,7 +25,8 @@ var _ccSyscareScript = function () {
             $('[id="fme-timer-scripts"]').text('')
             wAtendimentoTimer = moment("00:00:00", "HH:mm:ss");
             $('[id="fme-scripts-pergunta-timer"]').text('')
-            $('[id="mnu-dados-regulacao-itens"]').empty()                        
+            $('[id="mnu-dados-regulacao-itens"]').empty()               
+            $('[name="data-anRespondedor"]').val('')
             $('[id="container-btn-cancelar"]').attr('hidden', true)
             $('[id="container-btn-finalizar"]').attr('hidden', true)
             $('[id="container-btn-iniciar"]').attr('hidden', false)
@@ -175,8 +176,8 @@ var _ccSyscareScript = function () {
                                 <input value="" maxlength="50" name="cnRegulacao" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
                         </div>
                         <div class="m-4">
-                                <label for="anRespondedor"><strong>Respondedor</strong></label>
-                                <input value="" maxlength="50" name="anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
+                                <label for="data-anRespondedor"><strong>Respondedor</strong></label>
+                                <input value="" maxlength="50" name="data-anRespondedor" data-interacao-tp="1" class="form-control cc-col-4" placeholder="">
                         </div>
                         <div class="m-4">
                             <label for="dmSHCRegulacaoSTS"><strong>Status da Regulação</strong></label>
@@ -384,7 +385,7 @@ var _ccSyscareScript = function () {
                 cnProfissional: $("[name='cnProfissional']").val(),
                 anPergunta: $(`[for='${wScriptCodigo}-${wScriptItem}']`).text(),
                 dtPergunta: "" + wStartTimeSec + "",
-                anRespondedor: $("[name='anRespondedor']").val(),
+                anRespondedor: $("[name='data-anRespondedor']").val(),
                 dtResposta: "" + wEndTimeSec + "",
                 anResposta: _cc.string.valor(wValorInteracao),
                 anOBS: wValorObservacao,
@@ -626,7 +627,7 @@ var _ccSyscareScript = function () {
         _cc.loading.show('Carregando...', 1, 'carregaPergunta')
         
         var wScriptItem = regulacaoScript[pScript][pItem]
-        pItem > 0 && $("[name='anRespondedor']").val() ? $("[name='anRespondedor']").attr("readonly", true) : $("[name='anRespondedor']").attr("readonly", false)
+        pItem > 0 && $("[name='data-anRespondedor']").val() ? $("[name='data-anRespondedor']").attr("readonly", true) : $("[name='data-anRespondedor']").attr("readonly", false)
 
         if (wScriptItem.anInteracaoCondicional) {
             var wClausula = await _ccSyscare2.condiciona(wScriptItem.cnRegulacaoScript, wScriptItem.anInteracaoCondicional)
